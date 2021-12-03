@@ -1,0 +1,14 @@
+{
+  "name": "svelocity",
+  "version": "1.0.0",
+  "main": "main.js",
+  "repository": "git@github.com:oslabs-beta/sVelocity.git",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^16.0.4"
+  }
+}
