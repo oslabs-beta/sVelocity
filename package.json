@@ -6,6 +6,7 @@
   "author": "",
   "license": "MIT",
   "scripts": {
+    "dev": "nodemon --watch . --exec 'electron .'",
     "start": "electron ."
   },
   "devDependencies": {
