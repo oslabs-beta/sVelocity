@@ -60,6 +60,7 @@ ipcMain.handle("getFileFromUser", async () => {
       ],
     });
     const file = files.filePaths[0];
+    if (!file) return;
     const content = await fs.readFile(file, "utf-8");
     console.log(content);
   } catch (error) {
