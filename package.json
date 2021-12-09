@@ -6,7 +6,7 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --watch . --exec 'electron .'",
+    "start": "electron .",
     "dev": "rollup -c -w",
     "build": "rollup -c"
   },
