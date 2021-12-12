@@ -12,7 +12,13 @@
   }
 }
 
-#container {
-  height: 50%;
-  background-color: red;
+body {
+  margin: 0px;
+  font-family: "Raleway", sans-serif;
+}
+
+#editor {
+  width: 100%;
+  height: calc(100% - 50px);
+  /* display: flex; */
 }
