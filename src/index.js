@@ -1,7 +1,28 @@
-import App from "./App.svelte";
+// var app = new App({
+//   target: document.getElementById('editor')
+// });
+// export default app;
 
-var app = new App({
-  target: document.getElementById("test"),
+// CodeMirror(document.querySelector('#editor'), {
+//   lineNumbers: true,
+//   tabSize: 2,
+//   value: 'console.log("Hello, World");',
+// });
+
+// var myCodeMirror = CodeMirror(
+//   function (elt) {
+//     myTextArea.parentNode.replaceChild(elt, myTextArea);
+//   },
+//   { value: myTextArea.value }
+// );
+const openFile = document.getElementById('open-file');
+
+openFile.addEventListener('click', async () => {
+  await window.fileHandler.getFileFromUser();
 });
 
-export default app;
+// var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+//   styleActiveLine: true,
+//   lineNumbers: true,
+//   matchBrackets: true
+// });

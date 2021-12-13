@@ -16,6 +16,6 @@ document
     document.getElementById("theme-source").innerHTML = "System";
   });
 
-openFile.addEventListener("click", async () => {
-  await window.fileHandler.getFileFromUser();
-});
+// openFile.addEventListener("click", async () => {
+//   await window.fileHandler.getFileFromUser();
+// });

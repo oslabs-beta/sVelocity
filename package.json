@@ -12,24 +12,25 @@
   },
   "devDependencies": {
     "electron": "^16.0.4",
+    "file-loader": "^6.2.0",
     "webpack-cli": "^4.9.1"
   },
   "dependencies": {
+    "codemirror": "^5.64.0",
     "css-loader": "^6.5.1",
     "electron-reload": "^2.0.0-alpha.1",
     "mini-css-extract-plugin": "^2.4.5",
-    "monaco-editor": "^0.30.1",
-    "monaco-editor-webpack-plugin": "^6.0.0",
-    "nodemon": "^2.0.15",
     "postcss": "^8.4.4",
     "postcss-import": "^14.0.2",
     "postcss-load-config": "^3.1.0",
     "postcss-loader": "^6.2.1",
+    "style-loader": "^3.3.1",
     "svelte": "^3.44.2",
     "svelte-loader": "^3.1.2",
     "svelte-preprocess": "^4.9.8",
     "tslib": "^2.3.1",
     "webpack": "^5.65.0",
+    "webpack-dev-server": "^4.6.0",
     "webpack-electron-reload": "^1.0.1"
   }
 }
