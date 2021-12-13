@@ -1,18 +1,38 @@
 const webpack = require("webpack");
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const monacoEditorWebpackPlugin = require("monaco-editor-webpack-plugin");
+// const ChunksWebpackPlugin = require('chunks-webpack-plugin');
 const mode = process.env.NODE_ENV || "development";
 const prod = mode === "production";
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
-  mode: mode,
   entry: "./src/index.js",
-  target: "electron-main",
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "bundle.js",
+    globalObject: 'self',
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'webpack-bundle.js',
+    publicPath: './dist/',
   },
+  // Compile for Electron for main process.
+  target: 'electron-main',
+  // configure whether to polyfill or mock certain Node.js globals
+  node: {
+    __dirname: false,
+    __filename: false
+  },
+  mode: mode,
+
+//   optimization: {
+//     minimize: false,
+//     splitChunks: {
+//         chunks: "all",
+//         name: false
+//     },
+// },
+// resolve: {
+//   modules: [path.join(__dirname, "src"), "node_modules"],
+// },
   devtool: "source-map",
   module: {
     rules: [
@@ -24,33 +44,20 @@ const config = {
           preprocess: require("svelte-preprocess")({ postcss: true }),
         },
       },
-
-      // {
-      //   test: /\.worker\.js$/,
-      //   exclude: /node_modules/,
-      //   use: {
-      //     loader: 'worker-loader',
-      //     options: {
-      //       name: '[name].js',
-      //     },
-      //   },
-      // },
       {
         test: /\.css$/,
-        // use: [
-        //   MiniCssExtractPlugin.loader,
-        //   {
-        //     loader: "css-loader",
-        //     options: {
-        //       importLoaders: 1,
-        //     },
-        //   },
-        //   "postcss-loader",
-        // ],
         use:
           process.env.NODE_ENV === "production"
             ? [MiniCssExtractPlugin.loader, "css-loader"]
             : ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          "style-loader", // creates style nodes from JS strings
+          "css-loader", // translates CSS into CommonJS
+          "sass-loader" // compiles Sass to CSS, using Node Sass by default
+        ]
       },
       {
         test: /\.ttf$/,
@@ -61,7 +68,15 @@ const config = {
   resolve: {
     extensions: [".mjs", ".js", ".svelte"],
   },
-  plugins: [new MiniCssExtractPlugin(), new monacoEditorWebpackPlugin()],
+  // plugins: [
+  //   // new MiniCssExtractPlugin(), 
+  //   new HtmlWebpackPlugin({
+  //     inject: true,
+  //     template: path.resolve(__dirname, "./index.html"),
+  // }),
+  // //   new ChunksWebpackPlugin()
+  //   // new monacoEditorWebpackPlugin()
+  // ],
 };
 
 module.exports = config;
