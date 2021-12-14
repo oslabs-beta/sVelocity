@@ -1,3 +1,4 @@
+// const { WebpackOptionsValidationError } = require("webpack");
 const editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
   theme: 'pastel-on-dark',
   mode: 'javascript',
@@ -25,14 +26,15 @@ document
     document.getElementById('theme-source').innerHTML = 'System';
   });
 
-openFile.addEventListener('click', () => {
-  let file;
-  //get file data sent from main through the api and set file to that data
-  window.fileHandler.getFileFromUser((data) => {
-    file = data;
+openFile.addEventListener('click', async () => {
+  // const file = 
+  await window.fileHandler.getFileFromUser();
+  await window.fileHandler. recieveMessage((content) => {
+    console.log("console logging from the renderer:", content);
+    editor.setValue(content);
   });
-  //const file = await window.electron.store.get('openedFile');
-  console.log('file from renderer', file);
+
+
   // editor.setValue(file);
 });
 

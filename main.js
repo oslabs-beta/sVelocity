@@ -51,7 +51,29 @@ app.whenReady().then(() => {
 });
 
 //codeblock which allows us to open files and read files
-ipcMain.handle('getFileFromUser', async () => {
+// ipcMain.handle('getFileFromUser', async () => {
+//   try {
+//     const files = await dialog.showOpenDialog({
+//       properties: ['openFile'],
+//       filters: [
+//         { name: 'Markdown Files', extensions: ['md', 'mdown', 'markdown'] },
+//         { name: 'Svelte Files', extensions: ['.svelte'] },
+//         { name: 'Markup Files', extensions: ['.html'] },
+//         { name: 'Javascript Files', extensions: ['.js'] },
+//         { name: 'Style Files', extensions: ['.css'] },
+//       ],
+//     });
+//     const file = files.filePaths[0];
+//     if (!file) return;
+//     const content = await fs.readFile(file, 'utf-8');
+//     store.set('openedFile', content);
+//     // console.log('open file in main', content);
+//     console.log('file in store', store.get('openedFile'));
+//   } catch (error) {
+//     console.log('error', error);
+//   }
+// });
+ipcMain.handle("getFileFromUser",  async (event) => {
   try {
     const files = await dialog.showOpenDialog({
       properties: ['openFile'],
@@ -66,10 +88,11 @@ ipcMain.handle('getFileFromUser', async () => {
     const file = files.filePaths[0];
     if (!file) return;
     const content = await fs.readFile(file, 'utf-8');
-    await win.webContents.send('getFile', content);
-    //store.set('openedFile', content);
+    event.sender.send("eventFromMain", content);
+    // window.webContents.send("eventFromMain", content)
+    // store.set('openedFile', content);
     // console.log('open file in main', content);
-    console.log('file in store', store.get('openedFile'));
+    // console.log('file in store', store.get('openedFile'));
   } catch (error) {
     console.log('error', error);
   }
