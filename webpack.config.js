@@ -1,13 +1,13 @@
-const webpack = require("webpack");
-const path = require("path");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require('webpack');
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const ChunksWebpackPlugin = require('chunks-webpack-plugin');
-const mode = process.env.NODE_ENV || "development";
-const prod = mode === "production";
+const mode = process.env.NODE_ENV || 'development';
+const prod = mode === 'production';
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
-  entry: "./src/index.js",
+  entry: './src/index.js',
   output: {
     globalObject: 'self',
     path: path.resolve(__dirname, 'dist'),
@@ -19,57 +19,57 @@ const config = {
   // configure whether to polyfill or mock certain Node.js globals
   node: {
     __dirname: false,
-    __filename: false
+    __filename: false,
   },
   mode: mode,
 
-//   optimization: {
-//     minimize: false,
-//     splitChunks: {
-//         chunks: "all",
-//         name: false
-//     },
-// },
-// resolve: {
-//   modules: [path.join(__dirname, "src"), "node_modules"],
-// },
-  devtool: "source-map",
+  //   optimization: {
+  //     minimize: false,
+  //     splitChunks: {
+  //         chunks: "all",
+  //         name: false
+  //     },
+  // },
+  // resolve: {
+  //   modules: [path.join(__dirname, "src"), "node_modules"],
+  // },
+  devtool: 'source-map',
   module: {
     rules: [
       {
         test: /\.svelte$/,
         exclude: /node_modules/,
-        loader: "svelte-loader",
+        loader: 'svelte-loader',
         options: {
-          preprocess: require("svelte-preprocess")({ postcss: true }),
+          preprocess: require('svelte-preprocess')({ postcss: true }),
         },
       },
       {
         test: /\.css$/,
         use:
-          process.env.NODE_ENV === "production"
-            ? [MiniCssExtractPlugin.loader, "css-loader"]
-            : ["style-loader", "css-loader"],
+          process.env.NODE_ENV === 'production'
+            ? [MiniCssExtractPlugin.loader, 'css-loader']
+            : ['style-loader', 'css-loader'],
       },
       {
         test: /\.scss$/,
         use: [
-          "style-loader", // creates style nodes from JS strings
-          "css-loader", // translates CSS into CommonJS
-          "sass-loader" // compiles Sass to CSS, using Node Sass by default
-        ]
+          'style-loader', // creates style nodes from JS strings
+          'css-loader', // translates CSS into CommonJS
+          'sass-loader', // compiles Sass to CSS, using Node Sass by default
+        ],
       },
       {
         test: /\.ttf$/,
-        use: ["file-loader"],
+        use: ['file-loader'],
       },
     ],
   },
   resolve: {
-    extensions: [".mjs", ".js", ".svelte"],
+    extensions: ['.mjs', '.js', '.svelte'],
   },
   // plugins: [
-  //   // new MiniCssExtractPlugin(), 
+  //   // new MiniCssExtractPlugin(),
   //   new HtmlWebpackPlugin({
   //     inject: true,
   //     template: path.resolve(__dirname, "./index.html"),

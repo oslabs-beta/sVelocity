@@ -12,6 +12,11 @@
   }
 }
 
+<<<<<<< HEAD
+#monaco-container {
+  height: 200px;
+  width: 200px;
+=======
 body {
   margin: 0px;
   font-family: "Raleway", sans-serif;
@@ -21,4 +26,5 @@ body {
   width: 100%;
   height: calc(100% - 50px);
   /* display: flex; */
+>>>>>>> dev
 }
