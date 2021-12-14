@@ -11,6 +11,9 @@ require('electron-reload')(__dirname, {
   // Note that the path to electron may vary according to the main file
   electron: require(`${__dirname}/node_modules/electron`),
 });
+const Store = require('electron-store');
+
+const store = new Store();
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -66,8 +69,10 @@ ipcMain.handle('getFileFromUser', async () => {
     const file = files.filePaths[0];
     if (!file) return;
     const content = await fs.readFile(file, 'utf-8');
-    console.log(content);
+    store.set('openedFile', content);
+    // console.log(store.get('openedFile'));
   } catch (error) {
     console.log('error', error);
   }
 });
+require('./src/index.js');

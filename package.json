@@ -19,6 +19,7 @@
     "codemirror": "^5.64.0",
     "css-loader": "^6.5.1",
     "electron-reload": "^2.0.0-alpha.1",
+    "electron-store": "^8.0.1",
     "mini-css-extract-plugin": "^2.4.5",
     "postcss": "^8.4.4",
     "postcss-import": "^14.0.2",
