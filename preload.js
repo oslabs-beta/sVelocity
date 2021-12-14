@@ -8,7 +8,8 @@ contextBridge.exposeInMainWorld("darkMode", {
 
 contextBridge.exposeInMainWorld("fileHandler", {
   getFileFromUser: () => ipcRenderer.invoke("getFileFromUser"),
-});
+  saveFile: () => ipcRenderer.invoke("saveFile")
+}, false);
 
 window.addEventListener("DOMContentLoaded", () => {
   const replaceText = (selector, text) => {
