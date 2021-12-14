@@ -44,14 +44,14 @@
 //   matchBrackets: true
 // });
 
-const { ipcRenderer } = win.require('electron');
-// const Store = require('electron-store');
-// const store = new Store();
-// ipcRenderer.on('getFileFromUser', (event, data) => {
-//   store.set('openedFile', data);
-// });
-// console.log("what's this store?", store.get('openedFile'));
+// const { ipcRenderer } = win.require('electron');
+// // const Store = require('electron-store');
+// // const store = new Store();
+// // ipcRenderer.on('getFileFromUser', (event, data) => {
+// //   store.set('openedFile', data);
+// // });
+// // console.log("what's this store?", store.get('openedFile'));
 
-win.fileHandler.getFileFromUser((data) => {
-  console.log(`Received ${data} from main process`);
-});
+// win.fileHandler.getFileFromUser((data) => {
+//   console.log(`Received ${data} from main process`);
+// });
