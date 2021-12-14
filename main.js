@@ -4,16 +4,10 @@ const {
   ipcMain,
   nativeTheme,
   dialog,
-} = require('electron');
-const path = require('path');
-const { promises: fs } = require('fs');
-require('electron-reload')(__dirname, {
-  // Note that the path to electron may vary according to the main file
-  electron: require(`${__dirname}/node_modules/electron`),
-});
-const Store = require('electron-store');
-
-const store = new Store();
+} = require("electron");
+const path = require("path");
+const { promises: fs } = require("fs");
+// const editor = require("./src/index.js");
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -72,7 +66,40 @@ ipcMain.handle('getFileFromUser', async () => {
     store.set('openedFile', content);
     // console.log(store.get('openedFile'));
   } catch (error) {
-    console.log('error', error);
+    console.log("error", error); 
   }
 });
-require('./src/index.js');
+
+
+ipcMain.handle("saveFile", () => {
+  let content = "add content here...";
+  dialog.showSaveDialog({
+    buttonLabel: 'Save Button(:',
+    filters: [
+      {name: 'Text Files', extensions: ['txt', 'docx']},
+      { name: "Markdown Files", extensions: ["md", "mdown", "markdown"] },
+      { name: "Svelte Files", extensions: [".svelte"] },
+      { name: "Markup Files", extensions: [".html"] },
+      { name: "Javascript Files", extensions: [".js"] },
+      { name: "Style Files", extensions: [".css"] },
+    ],
+    properties: []
+  }).then(async (file) => {
+    if (file === undefined) {
+      console.log("You didn't save the file");
+      return;
+    }
+
+    // fileName is a string that contains the path and filename created in the save file dialog.  
+    // const data = file.filePaths[];
+
+    console.log(file);
+    const saveFile = await fs.writeFile(file.filePath, content, (err) => {
+      if (err) {
+        alert("An error ocurred creating the file " + err.message)
+      }
+
+      alert("The file has been succesfully saved");
+    });
+  })
+})
