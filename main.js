@@ -66,7 +66,8 @@ ipcMain.handle('getFileFromUser', async () => {
     const file = files.filePaths[0];
     if (!file) return;
     const content = await fs.readFile(file, 'utf-8');
-    store.set('openedFile', content);
+    await win.webContents.send('getFile', content);
+    //store.set('openedFile', content);
     // console.log('open file in main', content);
     console.log('file in store', store.get('openedFile'));
   } catch (error) {

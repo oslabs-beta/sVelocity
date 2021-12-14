@@ -1,5 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron');
-const { remote } = require('electron');
+const { contextBridge, ipcRenderer, ipcMain } = require('electron');
 
 contextBridge.exposeInMainWorld('darkMode', {
   toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
@@ -9,7 +8,10 @@ contextBridge.exposeInMainWorld('darkMode', {
 contextBridge.exposeInMainWorld(
   'fileHandler',
   {
-    getFileFromUser: () => ipcRenderer.invoke('getFileFromUser'),
+    getFileFromUser: (callback) =>
+      ipcRenderer.on('getFile', (event, args) => {
+        callback(args);
+      }),
     saveFile: (channel, editorValue) =>
       ipcRenderer.invoke('saveFile', editorValue),
   },
