@@ -28,11 +28,15 @@ document
   });
 
 openFile.addEventListener('click', async () => {
+  //const file =
   await window.fileHandler.getFileFromUser();
+  // editor.setValue(file);
 });
 
 saveFileBtn.addEventListener('click', async () => {
+  //get file contents from codemirror editor
   const editorValue = await editor.getValue();
+  //api call with channel(saveFile) and passed-in data
   fileHandler.saveFile('saveFile', editorValue);
-  console.log('EditorRenderer', editorValue);
+  //console.log('EditorRenderer', editorValue);
 });

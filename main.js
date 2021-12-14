@@ -67,7 +67,8 @@ ipcMain.handle('getFileFromUser', async () => {
     if (!file) return;
     const content = await fs.readFile(file, 'utf-8');
     store.set('openedFile', content);
-    // console.log(store.get('openedFile'));
+    // console.log('open file in main', content);
+    console.log('file in store', store.get('openedFile'));
   } catch (error) {
     console.log('error', error);
   }
@@ -76,7 +77,7 @@ ipcMain.handle('getFileFromUser', async () => {
 ipcMain.handle('saveFile', (event, editorValue) => {
   const content = editorValue.toString();
 
-  console.log('editorValueMain2', editorValue);
+  //console.log('editorValueMain2', editorValue);
   dialog
     .showSaveDialog({
       buttonLabel: 'Save Button(:',
