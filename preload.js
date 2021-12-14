@@ -9,7 +9,11 @@ contextBridge.exposeInMainWorld('darkMode', {
 contextBridge.exposeInMainWorld(
   'fileHandler',
   {
-    getFileFromUser: () => ipcRenderer.invoke('getFileFromUser'),
+      getFileFromUser: (event) => ipcRenderer.invoke("getFileFromUser"),
+      recieveMessage: (callback) => ipcRenderer.on("eventFromMain",  async function(event, content) {
+      // console.log("this is the message inside the ipcOn:", content);
+      await callback(content);
+    }),
     saveFile: (channel, editorValue) =>
       ipcRenderer.invoke('saveFile', editorValue),
   },
