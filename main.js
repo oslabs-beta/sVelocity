@@ -13,31 +13,44 @@ const store = new Store();
 
 // instantiate browser view
 
-const createWindow =  () => {
+const createWindow = () => {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 800,
     webPreferences: {
       preload: path.join(app.getAppPath(), 'preload.js'),
     },
   });
-//set up broswer view
+  //set up broswer view
   win.loadFile('index.html');
-  win.webContents.openDevTools();
-  console.log("widthhhhhhhhh",   win.getBounds())
-  console.log("SIZE:",   win.getSize())
-  // const wid = win.width/3;
-  //trying to make width and height dynamic
-  let width = win.getSize();
-  width = width[0]/3;
-  let height = win.getSize()
-  height = height[1]/2;
-  console.log(height);
+  
+  // win.webContents.openDevTools();
+
+  console.log("widthhhhhhhhh", win.getBounds())
+  console.log("SIZE:", win.getSize())
+
   const view = new BrowserView();
   win.setBrowserView(view);
-  view.setBounds({ x: 500, y: 0, width: 300, height: 300 })
-  view.webContents.loadURL('https://github.com/oslabs-beta/sVelocity');
-  view.setAutoResize({horizontal: true, vertical: true})
+  view.setBounds({ x: 550, y: 0, width: 450, height: 600 })
+  view.webContents.loadURL('http://localhost:8080/');
+  view.setAutoResize({ width: true, height: true })
+
+  function devT() {
+    devtools = new BrowserWindow();
+    view.webContents.setDevToolsWebContents(devtools.webContents);
+    view.webContents.openDevTools({ mode: 'detach' });
+    view.webContents.once('did-finish-load', function () {
+      var windowBounds = view.getBounds();
+      devtools.setPosition(windowBounds.x + windowBounds.width, windowBounds.y);
+      devtools.setSize(windowBounds.width / 2, windowBounds.height);
+    });
+    win.on('move', function () {
+      var windowBounds = win.getBounds();
+      devtools.setPosition(windowBounds.x + windowBounds.width, windowBounds.y);
+    });
+  }
+  devT();
+
   ipcMain.handle('dark-mode:toggle', () => {
     if (nativeTheme.shouldUseDarkColors) {
       nativeTheme.themeSource = 'light';
@@ -64,30 +77,7 @@ app.whenReady().then(() => {
   });
 });
 
-//codeblock which allows us to open files and read files
-// ipcMain.handle('getFileFromUser', async () => {
-//   try {
-//     const files = await dialog.showOpenDialog({
-//       properties: ['openFile'],
-//       filters: [
-//         { name: 'Markdown Files', extensions: ['md', 'mdown', 'markdown'] },
-//         { name: 'Svelte Files', extensions: ['.svelte'] },
-//         { name: 'Markup Files', extensions: ['.html'] },
-//         { name: 'Javascript Files', extensions: ['.js'] },
-//         { name: 'Style Files', extensions: ['.css'] },
-//       ],
-//     });
-//     const file = files.filePaths[0];
-//     if (!file) return;
-//     const content = await fs.readFile(file, 'utf-8');
-//     store.set('openedFile', content);
-//     // console.log('open file in main', content);
-//     console.log('file in store', store.get('openedFile'));
-//   } catch (error) {
-//     console.log('error', error);
-//   }
-// });
-ipcMain.handle("getFileFromUser",  async (event) => {
+ipcMain.handle("getFileFromUser", async (event) => {
   try {
     const files = await dialog.showOpenDialog({
       properties: ['openFile'],
@@ -103,10 +93,6 @@ ipcMain.handle("getFileFromUser",  async (event) => {
     if (!file) return;
     const content = await fs.readFile(file, 'utf-8');
     event.sender.send("eventFromMain", content);
-    // window.webContents.send("eventFromMain", content)
-    // store.set('openedFile', content);
-    // console.log('open file in main', content);
-    // console.log('file in store', store.get('openedFile'));
   } catch (error) {
     console.log('error', error);
   }
@@ -115,7 +101,6 @@ ipcMain.handle("getFileFromUser",  async (event) => {
 ipcMain.handle('saveFile', (event, editorValue) => {
   const content = editorValue.toString();
 
-  //console.log('editorValueMain2', editorValue);
   dialog
     .showSaveDialog({
       buttonLabel: 'Save Button(:',
@@ -138,14 +123,8 @@ ipcMain.handle('saveFile', (event, editorValue) => {
           if (err) {
             alert('An error ocurred creating the file ' + err.message);
           }
-          //store.set('saveFile', saveFile);
           alert('The file has been succesfully saved');
         });
       }
-
-      // fileName is a string that contains the path and filename created in the save file dialog.
-      // const data = file.filePaths[];
-      // console.log('textArea____________', editor.getValue());
-      // console.log(file);
     });
 });

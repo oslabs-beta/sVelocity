@@ -3,6 +3,19 @@
     background: #333;
     color: white;
   }
+
+  .CodeMirror {
+    background: #333;
+    color: white;
+  }
+
+  .CodeMirror-gutter {
+    background: rgb(71, 71, 71);
+  }
+
+  .CodeMirror-linenumbers{
+    background: rgb(71, 71, 71);
+  }
 }
 
 @media (prefers-color-scheme: light) {
@@ -10,15 +23,42 @@
     background: #ddd;
     color: black;
   }
+
+  .CodeMirror {
+    background: #ddd;
+    color: black;
+  }
+
+  .CodeMirror-gutter {
+    background: white;
+  }
+
+  .CodeMirror-linenumbers{
+    background: white;
+  }
 }
+
 
 body {
   margin: 0px;
   font-family: "Raleway", sans-serif;
 }
 
-#editor {
-  width: 100%;
+/* #editor {
+  width: 33.5%;
   height: calc(100% - 50px);
   /* display: flex; */
+/* } */ 
+#editor {
+  height: 100% !important;
+}
+.CodeMirror {
+  width: 55%; 
+  /* height: 90% !important; */
+  resize: vertical;
+  overflow: auto !important;
+}
+
+.buttons {
+  margin-top: 2rem;
 }

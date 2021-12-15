@@ -1,15 +1,16 @@
-// const { WebpackOptionsValidationError } = require("webpack");
 const editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
-  theme: 'pastel-on-dark',
+  // theme: 'pastel-on-dark',
   mode: 'javascript',
   lineNumbers: true,
   tabSize: 2,
   value: 'console.log("Hello, World");',
 });
 
+editor.setSize(500, 300);
+
 const openFile = document.getElementById('open-file');
 const saveFileBtn = document.getElementById('save-file');
-// const fileContents = document.getElementById('#editor');
+
 document
   .getElementById('toggle-dark-mode')
   .addEventListener('click', async () => {
@@ -29,13 +30,10 @@ document
 openFile.addEventListener('click', async () => {
   // const file = 
   await window.fileHandler.getFileFromUser();
-  await window.fileHandler. recieveMessage((content) => {
+  await window.fileHandler.recieveMessage((content) => {
     console.log("console logging from the renderer:", content);
     editor.setValue(content);
   });
-
-
-  // editor.setValue(file);
 });
 
 saveFileBtn.addEventListener('click', async () => {
@@ -43,5 +41,4 @@ saveFileBtn.addEventListener('click', async () => {
   const editorValue = await editor.getValue();
   //api call with channel(saveFile) and passed-in data
   fileHandler.saveFile('saveFile', editorValue);
-  //console.log('EditorRenderer', editorValue);
 });
