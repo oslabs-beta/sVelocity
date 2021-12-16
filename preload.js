@@ -5,15 +5,32 @@ contextBridge.exposeInMainWorld('darkMode', {
   system: () => ipcRenderer.invoke('dark-mode:system'),
 });
 
+// contextBridge.exposeInMainWorld(
+//   'storeHandler',
+//   {
+//     sentStoreValueToMain: (channel, value) =>
+//       ipcRenderer.invoke('sentValue', value),
+//     getStoreValueFromMain: (callback) =>
+//       ipcRenderer.on('getValue', async function (event, value) {
+//         // console.log("this is the message inside the ipcOn:", content);
+//         await callback(value);
+//       }),
+//   },
+//   false
+// );
+
 contextBridge.exposeInMainWorld(
   'fileHandler',
   {
     getFileFromUser: (event) => ipcRenderer.invoke('getFileFromUser'),
     recieveMessage: (callback) =>
-      ipcRenderer.on('eventFromMain', async function (event, content) {
-        // console.log("this is the message inside the ipcOn:", content);
-        await callback(content);
-      }),
+      ipcRenderer.on(
+        'eventFromMain',
+        async function (event, content, allFiles) {
+          // console.log("this is the message inside the ipcOn:", content);
+          await callback(content, allFiles);
+        }
+      ),
     saveFile: (channel, editorValue) =>
       ipcRenderer.invoke('saveFile', editorValue),
   },

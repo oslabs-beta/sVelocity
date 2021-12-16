@@ -12,8 +12,9 @@ const Store = require('electron-store');
 const store = new Store();
 
 // instantiate browser view
+store.set('allFiles', []);
 
-const createWindow =  () => {
+const createWindow = () => {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -21,31 +22,23 @@ const createWindow =  () => {
       preload: path.join(app.getAppPath(), 'preload.js'),
     },
   });
-//set up broswer view
+  //set up broswer view
   win.loadFile('index.html');
   win.webContents.openDevTools();
-  console.log("widthhhhhhhhh",   win.getBounds())
-  console.log("SIZE:",   win.getSize())
-  // const wid = win.width/3;
-  //trying to make width and height dynamic
-  let width = win.getSize();
-  width = width[0]/3;
-  let height = win.getSize()
-  height = height[1]/2;
-  console.log(height);
-  const view = new BrowserView();
-  win.setBrowserView(view);
-  view.setBounds({ x: 500, y: 0, width: 300, height: 300 })
-  view.webContents.loadURL('https://github.com/oslabs-beta/sVelocity');
-  view.setAutoResize({horizontal: true, vertical: true})
-  ipcMain.handle('dark-mode:toggle', () => {
-    if (nativeTheme.shouldUseDarkColors) {
-      nativeTheme.themeSource = 'light';
-    } else {
-      nativeTheme.themeSource = 'dark';
-    }
-    return nativeTheme.shouldUseDarkColors;
-  });
+
+  // const view = new BrowserView();
+  // win.setBrowserView(view);
+  // view.setBounds({ x: 500, y: 0, width: 300, height: 300 });
+  // view.webContents.loadURL('https://github.com/oslabs-beta/sVelocity');
+  // view.setAutoResize({ horizontal: true, vertical: true });
+  // ipcMain.handle('dark-mode:toggle', () => {
+  //   if (nativeTheme.shouldUseDarkColors) {
+  //     nativeTheme.themeSource = 'light';
+  //   } else {
+  //     nativeTheme.themeSource = 'dark';
+  //   }
+  //   return nativeTheme.shouldUseDarkColors;
+  // });
 
   ipcMain.handle('dark-mode:system', () => {
     nativeTheme.themeSource = 'system';
@@ -87,7 +80,7 @@ app.whenReady().then(() => {
 //     console.log('error', error);
 //   }
 // });
-ipcMain.handle("getFileFromUser",  async (event) => {
+ipcMain.handle('getFileFromUser', async (event) => {
   try {
     const files = await dialog.showOpenDialog({
       properties: ['openFile'],
@@ -102,8 +95,14 @@ ipcMain.handle("getFileFromUser",  async (event) => {
     const file = files.filePaths[0];
     if (!file) return;
     const content = await fs.readFile(file, 'utf-8');
-    event.sender.send("eventFromMain", content);
-    // window.webContents.send("eventFromMain", content)
+
+    allFiles = store.get('allFiles');
+    allFiles.push(file);
+    store.set('allFiles', allFiles);
+    console.log(store.get('allFiles'));
+    event.sender.send('eventFromMain', content, allFiles);
+
+
     // store.set('openedFile', content);
     // console.log('open file in main', content);
     // console.log('file in store', store.get('openedFile'));
@@ -111,6 +110,10 @@ ipcMain.handle("getFileFromUser",  async (event) => {
     console.log('error', error);
   }
 });
+
+// ipcMain.handle('getStoreValue', (event, key) => {
+//   return store.get(key);
+// });
 
 ipcMain.handle('saveFile', (event, editorValue) => {
   const content = editorValue.toString();

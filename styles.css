@@ -14,11 +14,37 @@
 
 body {
   margin: 0px;
-  font-family: "Raleway", sans-serif;
+  font-family: 'Raleway', sans-serif;
 }
 
-#editor {
+.editor {
   width: 100%;
   height: calc(100% - 50px);
   /* display: flex; */
+}
+
+.tabs {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  margin-bottom: -1px;
+}
+.tab {
+  padding: 5px 10px;
+  background: #ddd;
+  border: 1px solid #bbb;
+  width: fit-content;
+  display: inline-block;
+}
+.tab.active {
+  background: #fff;
+  border-bottom-color: white !important;
+}
+
+.tab-pane {
+  display: none;
+  border: 1px solid #bbb;
+}
+.tab-pane.active {
+  display: block;
 }

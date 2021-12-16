@@ -27,15 +27,16 @@ document
   });
 
 openFile.addEventListener('click', async () => {
-  // const file = 
   await window.fileHandler.getFileFromUser();
-  await window.fileHandler. recieveMessage((content) => {
-    console.log("console logging from the renderer:", content);
+
+  await window.fileHandler.recieveMessage((content, allFiles) => {
+    // console.log('console logging from the renderer:', content);
+    console.log(allFiles, 'all files are here');
     editor.setValue(content);
   });
-
-
-  // editor.setValue(file);
+  // await window.storeHandler.getStoreValueFromMain((value) => {
+  //   editor.setValue(content);
+  // });
 });
 
 saveFileBtn.addEventListener('click', async () => {
