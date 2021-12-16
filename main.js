@@ -1,6 +1,7 @@
 const {
   app,
   BrowserWindow,
+  BrowserView,
   ipcMain,
   nativeTheme,
   dialog,
@@ -10,9 +11,9 @@ const { promises: fs } = require('fs');
 const Store = require('electron-store');
 const store = new Store();
 
-// const editor = require("./src/index.js");
+// instantiate browser view
 
-const createWindow = () => {
+const createWindow =  () => {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -20,10 +21,23 @@ const createWindow = () => {
       preload: path.join(app.getAppPath(), 'preload.js'),
     },
   });
-
+//set up broswer view
   win.loadFile('index.html');
   win.webContents.openDevTools();
-
+  console.log("widthhhhhhhhh",   win.getBounds())
+  console.log("SIZE:",   win.getSize())
+  // const wid = win.width/3;
+  //trying to make width and height dynamic
+  let width = win.getSize();
+  width = width[0]/3;
+  let height = win.getSize()
+  height = height[1]/2;
+  console.log(height);
+  const view = new BrowserView();
+  win.setBrowserView(view);
+  view.setBounds({ x: 500, y: 0, width: 300, height: 300 })
+  view.webContents.loadURL('https://github.com/oslabs-beta/sVelocity');
+  view.setAutoResize({horizontal: true, vertical: true})
   ipcMain.handle('dark-mode:toggle', () => {
     if (nativeTheme.shouldUseDarkColors) {
       nativeTheme.themeSource = 'light';
