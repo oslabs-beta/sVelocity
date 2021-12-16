@@ -7,6 +7,12 @@ contextBridge.exposeInMainWorld('darkMode', {
 });
 
 contextBridge.exposeInMainWorld(
+  'browserView',
+  {
+    getInputUrl: (channel, browserURL) => ipcRenderer.invoke('getInputUrl', browserURL)
+  },
+)
+contextBridge.exposeInMainWorld(
   'fileHandler',
   {
     getFileFromUser: (event) => ipcRenderer.invoke("getFileFromUser"),

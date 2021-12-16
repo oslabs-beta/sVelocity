@@ -23,7 +23,7 @@ const createWindow = () => {
   });
   //set up broswer view
   win.loadFile('index.html');
-  
+
   // win.webContents.openDevTools();
 
   console.log("widthhhhhhhhh", win.getBounds())
@@ -31,8 +31,22 @@ const createWindow = () => {
 
   const view = new BrowserView();
   win.setBrowserView(view);
-  view.setBounds({ x: 550, y: 0, width: 450, height: 600 })
-  view.webContents.loadURL('http://localhost:8080/');
+  view.setBounds({ x: 550, y: 0, width: 450, height: 600 });
+  let url;
+  if (!url) {
+    view.webContents.loadURL('https://http.cat/404');
+  }
+
+  ipcMain.handle('getInputUrl', async (event, browserURL) => {
+    try {
+      url = browserURL;
+      view.webContents.loadURL(url);
+    }
+    catch(error){
+      view.webContents.loadURL('https://http.cat/404');
+    }
+  });
+
   view.setAutoResize({ width: true, height: true })
 
   function devT() {
@@ -73,6 +87,7 @@ app.whenReady().then(() => {
   });
 
   app.on('window-all-closed', () => {
+    // win.closeDevTools();
     app.quit();
   });
 });

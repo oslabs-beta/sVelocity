@@ -44,6 +44,15 @@ body {
   font-family: "Raleway", sans-serif;
 }
 
+.browser-form-section{
+  position: relative;
+}
+
+.browser-form {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
 /* #editor {
   width: 33.5%;
   height: calc(100% - 50px);
@@ -54,8 +63,9 @@ body {
 }
 .CodeMirror {
   width: 55%; 
+  height: 35rem;
   /* height: 90% !important; */
-  resize: vertical;
+  /* resize: vertical; */
   overflow: auto !important;
 }
 

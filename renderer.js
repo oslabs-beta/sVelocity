@@ -3,13 +3,16 @@ const editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
   mode: 'javascript',
   lineNumbers: true,
   tabSize: 2,
-  value: 'console.log("Hello, World");',
+  width: 500,
+  height: 300,
 });
 
-editor.setSize(500, 300);
+// editor.setSize(500, 300);
 
 const openFile = document.getElementById('open-file');
 const saveFileBtn = document.getElementById('save-file');
+const seeBrowser = document.getElementById('browser-btn');
+
 
 document
   .getElementById('toggle-dark-mode')
@@ -26,6 +29,12 @@ document
     await window.darkMode.system();
     document.getElementById('theme-source').innerHTML = 'System';
   });
+
+seeBrowser.addEventListener('click', () => {
+  const browserURL = document.getElementById('url-field').value;
+  console.log(browserURL);
+  window.browserView.getInputUrl('getInputUrl', browserURL);
+})
 
 openFile.addEventListener('click', async () => {
   // const file = 
