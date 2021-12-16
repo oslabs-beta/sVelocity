@@ -1,26 +1,34 @@
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #333;
-    color: white;
-  }
-
-  .CodeMirror {
-    background: #333;
-    color: white;
-  }
-
-  .CodeMirror-gutter {
-    background: rgb(71, 71, 71);
-  }
-
-  .CodeMirror-linenumbers{
-    background: rgb(71, 71, 71);
-  }
-}
-
 @media (prefers-color-scheme: light) {
   body {
+    background: #333;
+    color: white;
+  }
+
+  .head {
+    color: white;
+  }
+
+  .CodeMirror {
+    background: #333;
+    color: white;
+  }
+
+  .CodeMirror-gutter {
+    background: rgb(71, 71, 71);
+  }
+
+  .CodeMirror-linenumbers{
+    background: rgb(71, 71, 71);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
     background: #ddd;
+    color: black;
+  }
+
+  .head {
     color: black;
   }
 
@@ -37,27 +45,13 @@
     background: white;
   }
 }
-
 
 body {
   margin: 0px;
   font-family: "Raleway", sans-serif;
 }
 
-.browser-form-section{
-  position: relative;
-}
 
-.browser-form {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
-/* #editor {
-  width: 33.5%;
-  height: calc(100% - 50px);
-  /* display: flex; */
-/* } */ 
 #editor {
   height: 100% !important;
 }
@@ -69,6 +63,20 @@ body {
   overflow: auto !important;
 }
 
-.buttons {
-  margin-top: 2rem;
+#browser-form-section {
+  float: right;
+  /* margin: 0 1.5%; */
+  width: 30%;
+  margin-left: 50%;
+  /* margin-top: .5%; */
+}
+
+#browser-form {
+  margin-top: .5%;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

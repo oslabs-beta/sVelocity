@@ -3,7 +3,7 @@ const editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
   mode: 'javascript',
   lineNumbers: true,
   tabSize: 2,
-  width: 500,
+  width: 450,
   height: 300,
 });
 

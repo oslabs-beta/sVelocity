@@ -8,12 +8,25 @@
   </link>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js">
   </script>
+  <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
+  <script type="text/javascript" src="node_modules/xterm/lib/xterm.js"></script>
+  <script type="text/javascript" src="node_modules/xterm/lib/xterm-addon-xy.js"></script>
   <link rel="stylesheet" type="text/css" href="./styles.css" />
   <title>sVelocity</title>
   <script defer src="./dist/webpack-bundle.js"></script>
 </head>
 
 <body>
+  <div class="header-container">
+    <h1 class="head">sVelocity</h1>
+    <section id="browser-form-section">
+      <form id="browser-form">
+        <label>Browser View URL:</label> <br>
+        <input type="text" id="url-field" value="http://localhost:3000/">
+        <input type="button" id="browser-btn" value="See Browser View"></input>
+      </form>
+    </section>
+  </div>
   <section class="buttons">
     <button id="toggle-dark-mode">Toggle Dark Mode</button>
     <button id="reset-to-system">Reset to System Theme</button>
@@ -25,13 +38,15 @@
   <textarea id="editor">
   </textarea>
 
-  <section id="browser-form-section">
-    <form id="browser-form">
-      <label>Browser View URL:</label> <br>
-      <input type="text" id="url-field" value="http://localhost:3000/"><br>
-      <input type="button" id="browser-btn" value="See Browser View"></input>
-    </form>
-  </section>
+  <div id='terminal-container'></div>
+  <!-- <script type="application/javascript">
+    const term = new Terminal();
+    const addOn= new FitAddon.FitAddon();
+    term.loadAddon(addOn);
+    term.open(document.getElementById('terminal-container'));
+    addOn.fit();
+    term.write('$ ')
+  </script> -->
   <script src="./renderer.js"></script>
 </body>
 

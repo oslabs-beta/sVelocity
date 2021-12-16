@@ -11,7 +11,6 @@ const { promises: fs } = require('fs');
 const Store = require('electron-store');
 const store = new Store();
 
-// instantiate browser view
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -31,7 +30,7 @@ const createWindow = () => {
 
   const view = new BrowserView();
   win.setBrowserView(view);
-  view.setBounds({ x: 550, y: 0, width: 450, height: 600 });
+  view.setBounds({ x: 550, y: 100, width: 450, height: 500 });
   let url;
   if (!url) {
     view.webContents.loadURL('https://http.cat/404');
