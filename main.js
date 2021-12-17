@@ -9,10 +9,28 @@ const {
 const path = require('path');
 const { promises: fs } = require('fs');
 const Store = require('electron-store');
+const { javascript } = require('webpack');
 const store = new Store();
 
-// instantiate browser view
 store.set('allFiles', []);
+
+const filters = [
+  { name: 'Text Files', extensions: ['txt', 'docx'] },
+  { name: 'Markdown Files', extensions: ['md', 'mdown', 'markdown'] },
+  { name: 'Svelte Files', extensions: ['.svelte'] },
+  { name: 'Markup Files', extensions: ['.html'] },
+  { name: 'Javascript Files', extensions: ['.js'] },
+  { name: 'Style Files', extensions: ['.css'] },
+];
+
+const modes = {
+  js: 'text/javascript',
+  md: 'text/x-markdown',
+  mdown: 'text/x-markdown',
+  markdown: 'text/x-markdown',
+  html: 'text/html',
+  css: 'text/css',
+};
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -57,55 +75,35 @@ app.whenReady().then(() => {
   });
 });
 
-//codeblock which allows us to open files and read files
-// ipcMain.handle('getFileFromUser', async () => {
-//   try {
-//     const files = await dialog.showOpenDialog({
-//       properties: ['openFile'],
-//       filters: [
-//         { name: 'Markdown Files', extensions: ['md', 'mdown', 'markdown'] },
-//         { name: 'Svelte Files', extensions: ['.svelte'] },
-//         { name: 'Markup Files', extensions: ['.html'] },
-//         { name: 'Javascript Files', extensions: ['.js'] },
-//         { name: 'Style Files', extensions: ['.css'] },
-//       ],
-//     });
-//     const file = files.filePaths[0];
-//     if (!file) return;
-//     const content = await fs.readFile(file, 'utf-8');
-//     store.set('openedFile', content);
-//     // console.log('open file in main', content);
-//     console.log('file in store', store.get('openedFile'));
-//   } catch (error) {
-//     console.log('error', error);
-//   }
-// });
 ipcMain.handle('getFileFromUser', async (event) => {
   try {
     const files = await dialog.showOpenDialog({
       properties: ['openFile'],
-      filters: [
-        { name: 'Markdown Files', extensions: ['md', 'mdown', 'markdown'] },
-        { name: 'Svelte Files', extensions: ['.svelte'] },
-        { name: 'Markup Files', extensions: ['.html'] },
-        { name: 'Javascript Files', extensions: ['.js'] },
-        { name: 'Style Files', extensions: ['.css'] },
-      ],
+      filters: filters,
     });
     const file = files.filePaths[0];
     if (!file) return;
     const content = await fs.readFile(file, 'utf-8');
 
+    // push the new file item in allFiles array in store
+    // each new item will have a filepath, filename, mode, editor instance, active,
+
     allFiles = store.get('allFiles');
-    allFiles.push(file);
+    //file
+    allFiles.push({
+      filepath: file,
+      filename: file.slice(file.lastIndexOf('/') + 1, file.length),
+      editor: {
+        theme: 'pastel-on-dark',
+        mode: modes[file.slice(file.lastIndexOf('.') + 1, file.length)],
+        lineNumbers: true,
+        tabSize: 2,
+        value: content,
+      },
+    });
     store.set('allFiles', allFiles);
-    console.log(store.get('allFiles'));
+    //console.log(store.get('allFiles'));
     event.sender.send('eventFromMain', content, allFiles);
-
-
-    // store.set('openedFile', content);
-    // console.log('open file in main', content);
-    // console.log('file in store', store.get('openedFile'));
   } catch (error) {
     console.log('error', error);
   }
@@ -119,17 +117,15 @@ ipcMain.handle('saveFile', (event, editorValue) => {
   const content = editorValue.toString();
 
   //console.log('editorValueMain2', editorValue);
+  // if() {
+
+  // } else {
+
+  // }
   dialog
     .showSaveDialog({
       buttonLabel: 'Save Button(:',
-      filters: [
-        { name: 'Text Files', extensions: ['txt', 'docx'] },
-        { name: 'Markdown Files', extensions: ['md', 'mdown', 'markdown'] },
-        { name: 'Svelte Files', extensions: ['.svelte'] },
-        { name: 'Markup Files', extensions: ['.html'] },
-        { name: 'Javascript Files', extensions: ['.js'] },
-        { name: 'Style Files', extensions: ['.css'] },
-      ],
+      filters: filters,
       properties: [],
     })
     .then(async (file) => {
@@ -137,18 +133,12 @@ ipcMain.handle('saveFile', (event, editorValue) => {
         console.log("You didn't save the file");
         return;
       } else {
-        const saveFile = await fs.writeFile(file.filePath, content, (err) => {
+        await fs.writeFile(file.filePath, content, (err) => {
           if (err) {
             alert('An error ocurred creating the file ' + err.message);
           }
-          //store.set('saveFile', saveFile);
           alert('The file has been succesfully saved');
         });
       }
-
-      // fileName is a string that contains the path and filename created in the save file dialog.
-      // const data = file.filePaths[];
-      // console.log('textArea____________', editor.getValue());
-      // console.log(file);
     });
 });

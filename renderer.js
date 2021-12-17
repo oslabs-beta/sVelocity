@@ -7,6 +7,8 @@ const editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
   value: 'console.log("Hello, World");',
 });
 
+
+
 const openFile = document.getElementById('open-file');
 const saveFileBtn = document.getElementById('save-file');
 
@@ -30,13 +32,9 @@ openFile.addEventListener('click', async () => {
   await window.fileHandler.getFileFromUser();
 
   await window.fileHandler.recieveMessage((content, allFiles) => {
-    // console.log('console logging from the renderer:', content);
     console.log(allFiles, 'all files are here');
     editor.setValue(content);
   });
-  // await window.storeHandler.getStoreValueFromMain((value) => {
-  //   editor.setValue(content);
-  // });
 });
 
 saveFileBtn.addEventListener('click', async () => {
