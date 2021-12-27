@@ -9,7 +9,7 @@ const {
 const path = require('path');
 const { promises: fs } = require('fs');
 const Store = require('electron-store');
-const { javascript } = require('webpack');
+//const { javascript } = require('webpack');
 const store = new Store();
 
 store.set('allFiles', []);
@@ -44,19 +44,19 @@ const createWindow = () => {
   win.loadFile('index.html');
   win.webContents.openDevTools();
 
-  // const view = new BrowserView();
-  // win.setBrowserView(view);
+  const view = new BrowserView();
+  win.setBrowserView(view);
   // view.setBounds({ x: 500, y: 0, width: 300, height: 300 });
   // view.webContents.loadURL('https://github.com/oslabs-beta/sVelocity');
   // view.setAutoResize({ horizontal: true, vertical: true });
-  // ipcMain.handle('dark-mode:toggle', () => {
-  //   if (nativeTheme.shouldUseDarkColors) {
-  //     nativeTheme.themeSource = 'light';
-  //   } else {
-  //     nativeTheme.themeSource = 'dark';
-  //   }
-  //   return nativeTheme.shouldUseDarkColors;
-  // });
+  ipcMain.handle('dark-mode:toggle', () => {
+    if (nativeTheme.shouldUseDarkColors) {
+      nativeTheme.themeSource = 'light';
+    } else {
+      nativeTheme.themeSource = 'dark';
+    }
+    return nativeTheme.shouldUseDarkColors;
+  });
 
   ipcMain.handle('dark-mode:system', () => {
     nativeTheme.themeSource = 'system';
@@ -93,6 +93,7 @@ ipcMain.handle('getFileFromUser', async (event) => {
     allFiles.push({
       filepath: file,
       filename: file.slice(file.lastIndexOf('/') + 1, file.length),
+      active: false,
       editor: {
         theme: 'pastel-on-dark',
         mode: modes[file.slice(file.lastIndexOf('.') + 1, file.length)],
@@ -114,7 +115,7 @@ ipcMain.handle('getFileFromUser', async (event) => {
 // });
 
 ipcMain.handle('saveFile', (event, editorValue) => {
-  const content = editorValue.toString();
+  //const content = editorValue.toString();
 
   //console.log('editorValueMain2', editorValue);
   // if() {
