@@ -13,39 +13,27 @@ let input;
 terminal.onKey(e => {
   console.log(e.key);
   terminal.write(e.key);
-  cache.push(e.key);
+  if(e.key !== '\r') {
+    cache.push(e.key);
+  }
   console.log(cache)
-  if (e.key == '\r') 
+  if (e.key == '\r')
     terminal.write('\n');
-    const code = e.key.charCodeAt(0);
-    if(code == 127){   //Backspace
-        terminal.write("\b \b");
-        cache.pop();
-    }
+  const code = e.key.charCodeAt(0);
+  if (code == 127) {   //Backspace
+    terminal.write("\b \b");
+    cache.pop();
+  }
 })
 terminal.onLineFeed(e => {
   input = cache.join('');
-  console.log(input)
+  console.log('input in index.js', input);
   cache = [];  // Empty buffer
 
-const command = input.slice(0, input.indexOf(" "))
-const args = input.slice(input.indexOf(" ")+1, input.length).split(" ")
-console.log(command)
-console.log(args)
-
-
-const ls = spawn(command, args, { shell: true });
-
-ls.stdout.on('data', (data) => {
-  console.log(`stdout: ${data}`);
+  const termCommand = input.slice(0, input.indexOf(" "))
+  console.log('command in index.js', termCommand);
+  let args = input.slice(input.indexOf(" ") + 1, input.length).split(" ");
+  console.log('logging argssss', args);
+  terminalHandler.runTerminal('runTerminal', termCommand, args);
 });
-
-ls.stderr.on('data', (data) => {
-  console.error(`stderr: ${data}`);
-});
-
-ls.on('close', (code) => {
-  console.log(`child process exited with code ${code}`);
-});
-});
-// const input = "yarn add create-react-app"
+//figure out how to get the spawn functionality working. Try to use the main.js to expose in the main world and share info back and forth.

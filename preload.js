@@ -11,7 +11,16 @@ contextBridge.exposeInMainWorld(
   {
     getInputUrl: (channel, browserURL) => ipcRenderer.invoke('getInputUrl', browserURL)
   },
-)
+);
+
+contextBridge.exposeInMainWorld(
+  'terminalHandler',
+  {
+    runTerminal: (channel, termCommand, args) => ipcRenderer.invoke('runTerminal', termCommand, args)
+  },
+);
+
+
 contextBridge.exposeInMainWorld(
   'fileHandler',
   {

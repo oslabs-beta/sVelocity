@@ -10,7 +10,8 @@ const path = require('path');
 const { promises: fs } = require('fs');
 const Store = require('electron-store');
 const store = new Store();
-// const { spawn } = require('child_process');
+const exec = require('child_process');
+const spawn = require('cross-spawn');
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -144,3 +145,19 @@ ipcMain.handle('saveFile', (event, editorValue) => {
     });
 });
 
+ipcMain.handle('runTerminal', (event, termCommand, args) => {
+  console.log('arguments in main.js', termCommand + ' ' + args);
+  const ls = spawn(termCommand, args, {"cwd":'/tmp'});
+
+  ls.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+
+  ls.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  ls.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
+  });
+})
