@@ -9,7 +9,6 @@ const {
 const path = require('path');
 const { promises: fs } = require('fs');
 const Store = require('electron-store');
-//const { javascript } = require('webpack');
 const store = new Store();
 
 store.set('allFiles', []);
@@ -79,32 +78,54 @@ ipcMain.handle('getFileFromUser', async (event) => {
   try {
     const files = await dialog.showOpenDialog({
       properties: ['openFile'],
-      filters: filters,
+      filters: [{ name: 'All Files', extensions: ['*'] }],
+      //filters: filters,
     });
-    const file = files.filePaths[0];
-    if (!file) return;
-    const content = await fs.readFile(file, 'utf-8');
+    // const dir = await dialog.showOpenDialog({
+    //   properties: ['openDirectory'],
+    // });
 
-    // push the new file item in allFiles array in store
-    // each new item will have a filepath, filename, mode, editor instance, active,
+    // const dirPath = dir.filePaths[0];
 
-    allFiles = store.get('allFiles');
-    //file
-    allFiles.push({
-      filepath: file,
-      filename: file.slice(file.lastIndexOf('/') + 1, file.length),
-      active: false,
-      editor: {
-        theme: 'pastel-on-dark',
-        mode: modes[file.slice(file.lastIndexOf('.') + 1, file.length)],
-        lineNumbers: true,
-        tabSize: 2,
-        value: content,
-      },
-    });
-    store.set('allFiles', allFiles);
-    //console.log(store.get('allFiles'));
-    event.sender.send('eventFromMain', content, allFiles);
+    // const dirContents = await fs.readdir(dirPath, 'utf-8');
+
+    // console.log(dirContents);
+
+      const file = files.filePaths[0];
+      if (!file) return;
+
+      const content = await fs.readFile(file, 'utf-8');
+      console.log("---------",content);
+      // push the new file item in allFiles array in store
+      // each new item will have a filepath, filename, mode, editor instance, active,
+
+      allFiles = store.get('allFiles');
+
+      //check if file exists in store and don't create duplicate
+      if (
+        allFiles.find((obj) => {
+          return obj.filepath === file;
+        })
+      ) {
+        return;
+      }
+
+      //file
+      allFiles.push({
+        filepath: file,
+        filename: file.slice(file.lastIndexOf('/') + 1, file.length),
+        active: false,
+        editor: {
+          theme: 'pastel-on-dark',
+          mode: modes[file.slice(file.lastIndexOf('.') + 1, file.length)],
+          lineNumbers: true,
+          tabSize: 2,
+          value: content,
+        },
+      });
+      store.set('allFiles', allFiles);
+      //console.log(store.get('allFiles'));
+      event.sender.send('eventFromMain', content, allFiles);
   } catch (error) {
     console.log('error', error);
   }
@@ -118,11 +139,7 @@ ipcMain.handle('saveFile', (event, editorValue) => {
   //const content = editorValue.toString();
 
   //console.log('editorValueMain2', editorValue);
-  // if() {
-
-  // } else {
-
-  // }
+  
   dialog
     .showSaveDialog({
       buttonLabel: 'Save Button(:',

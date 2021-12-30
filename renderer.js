@@ -1,48 +1,3 @@
-// var editors = document.getElementsByClassName('editor');
-// for (var i = 0; i < editors.length; i++) {
-//   var self = editors[i];
-//   var editor = CodeMirror.fromTextArea(self, {
-//     mode: 'javascript',
-//     lineNumbers: true,
-//     autoRefresh: true,
-//   });
-//   editor.save();
-// }
-
-// var tabs = document.querySelectorAll('.tab');
-
-// for (var i = 0; i < tabs.length; i++) {
-//   var self = tabs[i];
-//   self.addEventListener('click', function () {
-//     var data = this.getAttribute('data-tab');
-//     document.querySelectorAll('.tab-pane.active')[0].classList.remove('active');
-//     document
-//       .querySelectorAll('.tab-pane[data-pane="' + data + '"]')[0]
-//       .classList.add('active');
-//     document.querySelectorAll('.tab.active')[0].classList.remove('active');
-//     this.classList.add('active');
-//   });
-// }
-
-// let store = [];
-
-// let editors = store.forEach((obj) => {
-//   CodeMirror.fromTextArea(document.querySelector('#editor'), obj.editor);
-// });
-
-// const tabs = store.forEach((obj) => {
-//   return obj.filename;
-// });
-
-// function createDomElement(innerText, attribute, attributeVal) {
-//   const ul = document.getElementsByTagName('UL');
-//   const tab = document.createElement('li');
-//   tab.innerText = `${innerText}`;
-//   tab.setAttribute(attribute, attributeVal);
-//   ul.appendChild(tab);
-// }
-
-// const { WebpackOptionsValidationError } = require("webpack");
 const editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
   theme: 'pastel-on-dark',
   mode: 'javascript',
@@ -53,6 +8,7 @@ const editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
 
 const openFile = document.getElementById('open-file');
 const saveFileBtn = document.getElementById('save-file');
+const lastViewed = [];
 
 document
   .getElementById('toggle-dark-mode')
@@ -78,7 +34,7 @@ openFile.addEventListener('click', async () => {
     //you need to store the data from message (allFiles) in a new variable, otherwise no access to them
     const allData = allFiles;
     const self = allData[allData.length - 1];
-    console.log(self, 'self');
+    //console.log(self, 'self');
     const ul = document.getElementsByTagName('UL');
     const tab = document.createElement('li');
     const txt = document.createElement('h5');
@@ -93,23 +49,68 @@ openFile.addEventListener('click', async () => {
     tab.appendChild(btn);
 
     const tabs = document.getElementsByTagName('LI');
+    //on opening file make new tab active and add to lastViewed array
+    self.active = true;
+    lastViewed.push(self.filename);
+    console.log('lastViewed after push', lastViewed);
+    //when clicking on Tab
     txt.addEventListener('click', () => {
-      console.log('hoy');
+      console.log('tab event listener');
+      //show editor instance
       editor.setValue(self.editor.value);
+      //set all other tabs to non-active
+      //set current tab active
+      allData.forEach((obj) => {
+        if (obj !== self) {
+          obj.active = false;
+        } else {
+          obj.active = true;
+        }
+      });
+      //check lastViewed array and if two items presents remove last one and add current as first
+      if (lastViewed.length >= 2) {
+        lastViewed.pop();
+        lastViewed.unshift(self.filename);
+      }
+      console.log('lastViewed updated', lastViewed);
+      console.log('updated allData (active)', allData);
     });
+
+    //when close button clicked
     btn.addEventListener('click', () => {
+      console.log('close button event listener');
+      //if last tab is closed fall back to empty editor instance
       if (tabs.length <= 1) {
         editor.setValue('');
         console.log('hi');
+        //set closed tab to non-active and remove it
+        self.active = false;
         tab.remove();
       } else {
         console.log('hey');
+        //if not last tab and tab was active (was currently viewed), set tab to non-active
+        if (self.active) {
+          self.active = false;
+          //show last viewed tab content and set that to active
+          const lastViewedFile = allData.find(
+            (obj) => obj.filename === lastViewed[1]
+          );
+          editor.setValue(lastViewedFile.editor.value);
+          lastViewedFile.active = true;
+        }
+        //if not last tab and tab was non-active (not currently viewed)
+        else {
+        }
+        //set closed tab to non-active and remove it
         tab.remove();
-        //editor.setValue(ul[ul.length - 1]);
       }
+      //remove tab from allData (files array)
+    
+      allData.splice(allData.indexOf(self), 1);
+      console.log('updated allData', allData);
     });
+
     ul[0].appendChild(tab);
-    console.log('heya');
     editor.setValue(content);
   });
 });
