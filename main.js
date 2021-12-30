@@ -5,6 +5,7 @@ const {
   ipcMain,
   nativeTheme,
   dialog,
+  ipcRenderer,
 } = require('electron');
 const path = require('path');
 const { promises: fs } = require('fs');
@@ -25,46 +26,55 @@ const createWindow = () => {
   //set up broswer view
   win.loadFile('index.html');
 
-  win.webContents.openDevTools();
+  win.webContents.openDevTools({mode: 'detach'});
 
   console.log("widthhhhhhhhh", win.getBounds())
   console.log("SIZE:", win.getSize())
 
-  // const view = new BrowserView();
-  // win.setBrowserView(view);
-  // view.setBounds({ x: 550, y: 100, width: 450, height: 500 });
-  // let url;
-  // if (!url) {
-  //   view.webContents.loadURL('https://http.cat/404');
-  // }
+  const view = new BrowserView();
+  win.setBrowserView(view);
+  view.setBounds({ x: 550, y: 68, width: 450, height: 480 });
+  let url;
+  if (!url) {
+    view.webContents.loadURL('https://svelte.dev/docs');
+  }
 
-  // ipcMain.handle('getInputUrl', async (event, browserURL) => {
-  //   try {
-  //     url = browserURL;
-  //     view.webContents.loadURL(url);
-  //   }
-  //   catch(error){
-  //     view.webContents.loadURL('https://http.cat/404');
-  //   }
-  // });
+  ipcMain.handle('getInputUrl', async (event, browserURL) => {
+    try {
+      url = browserURL;
+      view.webContents.loadURL(url);
+    }
+    catch (error) {
+      view.webContents.loadURL('https://http.cat/404');
+    }
+  });
 
-  // view.setAutoResize({ width: true, height: true })
+  view.webContents.on('did-fail-load', function () {
+    console.log(`failed to load ${url}`);
+    view.webContents.loadURL('https://http.cat/404');
+  })
+  view.setAutoResize({ horizontal: true })
 
-  // function devT() {
-  //   devtools = new BrowserWindow();
-  //   view.webContents.setDevToolsWebContents(devtools.webContents);
-  //   view.webContents.openDevTools({ mode: 'detach' });
-  //   view.webContents.once('did-finish-load', function () {
-  //     var windowBounds = view.getBounds();
-  //     devtools.setPosition(windowBounds.x + windowBounds.width, windowBounds.y);
-  //     devtools.setSize(windowBounds.width / 2, windowBounds.height);
-  //   });
-  //   win.on('move', function () {
-  //     var windowBounds = win.getBounds();
-  //     devtools.setPosition(windowBounds.x + windowBounds.width, windowBounds.y);
-  //   });
-  // }
-  // devT();
+  function devT() {
+    // devtools = new BrowserWindow();
+    // view.webContents.setDevToolsWebContents(view.webContents);
+    view.webContents.openDevTools({ mode: 'right' });
+    view.webContents.once('did-finish-load', function () {
+      var windowBounds = view.getBounds();
+      devtools.setPosition(windowBounds.x + windowBounds.width, windowBounds.y);
+      devtools.setSize(windowBounds.width / 2, windowBounds.height);
+    });
+  }
+    // win.on('move', function () {
+    //   var windowBounds = win.getBounds();
+    //   devtools.setPosition(windowBounds.x + windowBounds.width, windowBounds.y);
+    //   devtools.on('closed', function (){
+    //     devtools = null;
+    //   })
+    // });
+  ipcMain.handle('openDevTools', () => {
+    devT();
+  });
 
   ipcMain.handle('dark-mode:toggle', () => {
     if (nativeTheme.shouldUseDarkColors) {
@@ -146,10 +156,16 @@ ipcMain.handle('saveFile', (event, editorValue) => {
 });
 
 ipcMain.handle('runTerminal', (event, termCommand, args) => {
+  if (termCommand == '' || args == '') {
+    return;
+  }
   console.log('arguments in main.js', termCommand + ' ' + args);
-  const ls = spawn(termCommand, args, {"cwd":'/tmp'});
+
+  const ls = spawn(termCommand, args, { "cwd": '/tmp' });
 
   ls.stdout.on('data', (data) => {
+    data = data.toString().trim();
+    event.sender.send('terminalOutput', data);
     console.log(`stdout: ${data}`);
   });
 

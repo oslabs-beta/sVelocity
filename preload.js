@@ -14,9 +14,18 @@ contextBridge.exposeInMainWorld(
 );
 
 contextBridge.exposeInMainWorld(
+  'devToolsHandler',
+  {
+    openDevTools: (channel) => ipcRenderer.invoke('openDevTools')
+  }
+)
+contextBridge.exposeInMainWorld(
   'terminalHandler',
   {
-    runTerminal: (channel, termCommand, args) => ipcRenderer.invoke('runTerminal', termCommand, args)
+    runTerminal: (channel, termCommand, args) => ipcRenderer.invoke('runTerminal', termCommand, args),
+    terminalOutput: (callback) => ipcRenderer.on('terminalOutput', async function (event, content) {
+      await callback(content);
+    })
   },
 );
 

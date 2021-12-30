@@ -18,12 +18,13 @@
 
 <body>
   <div class="header-container">
-    <h1 class="head">sVelocity</h1>
+    <!-- <h3 class="head">sVelocity</h3> -->
     <section id="browser-form-section">
       <form id="browser-form">
-        <label>Browser View URL:</label> <br>
-        <input type="text" id="url-field" value="http://localhost:3000/">
+        <label>Browser View URL:</label>
+        <input type="text" id="url-field" value="place url here...">
         <input type="button" id="browser-btn" value="See Browser View"></input>
+        <input type="button" id="devtools-btn" value="Open DevTools"></input>
       </form>
     </section>
   </div>
@@ -37,8 +38,9 @@
   </section>
   <textarea id="editor">
   </textarea>
-
+<div class= "outer-terminal">
   <div id='terminal-container'></div>
+</div>
   <!-- <script type="application/javascript">
     const term = new Terminal();
     const addOn= new FitAddon.FitAddon();

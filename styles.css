@@ -49,18 +49,21 @@
 body {
   margin: 0px;
   font-family: "Raleway", sans-serif;
+  /* overflow: hidden; */
+  max-width: none;
+  overflow: hidden;
 }
-
 
 #editor {
   height: 100% !important;
 }
 .CodeMirror {
   width: 55%; 
-  height: 35rem;
+  height: 30rem;
   /* height: 90% !important; */
   /* resize: vertical; */
   overflow: auto !important;
+  margin-bottom: .5rem;
 }
 
 #browser-form-section {
@@ -79,4 +82,34 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: .3%;
+}
+
+/* #terminal-container {
+  position: absolute;
+  bottom: 0;
+  height: 20%;
+  width: auto;
+} */
+.outer-terminal {
+  display: inline-block;
+  position:absolute;
+  width: 100%;
+  height: 28%;
+  max-width: none;
+  left: -5px;
+  bottom: -5px;
+  cursor: nwse-resize; /*resizer cursor*/
+}
+
+#terminal-container {
+  /* margin: 0 auto; */
+  display: inline-block;
+  height: 100% !important;
+  width: 130% !important;
+  position:relative;
+  margin-left: 3%;
+  margin-right: 3%;
+  padding-right: 10%;
+  box-sizing: border-box;
 }

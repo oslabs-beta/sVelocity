@@ -3,8 +3,8 @@ const editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
   mode: 'javascript',
   lineNumbers: true,
   tabSize: 2,
-  width: 450,
-  height: 300,
+  // width: 450,
+  // height: 250,
 });
 
 // editor.setSize(500, 300);
@@ -12,7 +12,7 @@ const editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
 const openFile = document.getElementById('open-file');
 const saveFileBtn = document.getElementById('save-file');
 const seeBrowser = document.getElementById('browser-btn');
-
+const openDev = document.getElementById('devtools-btn');
 
 document
   .getElementById('toggle-dark-mode')
@@ -51,3 +51,7 @@ saveFileBtn.addEventListener('click', async () => {
   //api call with channel(saveFile) and passed-in data
   fileHandler.saveFile('saveFile', editorValue);
 });
+
+openDev.addEventListener('click', async () => {
+  devToolsHandler.openDevTools('openDevTools');
+})
