@@ -91,41 +91,40 @@ ipcMain.handle('getFileFromUser', async (event) => {
 
     // console.log(dirContents);
 
-      const file = files.filePaths[0];
-      if (!file) return;
+    const file = files.filePaths[0];
+    if (!file) return;
 
-      const content = await fs.readFile(file, 'utf-8');
-      console.log("---------",content);
-      // push the new file item in allFiles array in store
-      // each new item will have a filepath, filename, mode, editor instance, active,
+    const content = await fs.readFile(file, 'utf-8');
 
-      allFiles = store.get('allFiles');
+    // push the new file item in allFiles array in store
+    // each new item will have a filepath, filename, mode, editor instance, active,
 
-      //check if file exists in store and don't create duplicate
-      if (
-        allFiles.find((obj) => {
-          return obj.filepath === file;
-        })
-      ) {
-        return;
-      }
+    allFiles = store.get('allFiles');
 
-      //file
-      allFiles.push({
-        filepath: file,
-        filename: file.slice(file.lastIndexOf('/') + 1, file.length),
-        active: false,
-        editor: {
-          theme: 'pastel-on-dark',
-          mode: modes[file.slice(file.lastIndexOf('.') + 1, file.length)],
-          lineNumbers: true,
-          tabSize: 2,
-          value: content,
-        },
-      });
-      store.set('allFiles', allFiles);
-      //console.log(store.get('allFiles'));
-      event.sender.send('eventFromMain', content, allFiles);
+    //check if file exists in store and don't create duplicate
+    if (
+      allFiles.find((obj) => {
+        return obj.filepath === file;
+      })
+    ) {
+      return;
+    }
+
+    //file
+    allFiles.push({
+      filepath: file,
+      filename: file.slice(file.lastIndexOf('/') + 1, file.length),
+      active: false,
+      editor: {
+        theme: 'pastel-on-dark',
+        mode: modes[file.slice(file.lastIndexOf('.') + 1, file.length)],
+        lineNumbers: true,
+        tabSize: 2,
+        value: content,
+      },
+    });
+    store.set('allFiles', allFiles);
+    event.sender.send('eventFromMain', content, allFiles);
   } catch (error) {
     console.log('error', error);
   }
@@ -139,7 +138,7 @@ ipcMain.handle('saveFile', (event, editorValue) => {
   //const content = editorValue.toString();
 
   //console.log('editorValueMain2', editorValue);
-  
+
   dialog
     .showSaveDialog({
       buttonLabel: 'Save Button(:',
@@ -147,16 +146,20 @@ ipcMain.handle('saveFile', (event, editorValue) => {
       properties: [],
     })
     .then(async (file) => {
-      if (file === undefined) {
-        console.log("You didn't save the file");
-        return;
-      } else {
-        await fs.writeFile(file.filePath, content, (err) => {
-          if (err) {
-            alert('An error ocurred creating the file ' + err.message);
-          }
-          alert('The file has been succesfully saved');
-        });
+      try {
+        if (file === undefined) {
+          console.log("You didn't save the file");
+          return;
+        } else {
+          await fs.writeFile(file.filePath, content, (err) => {
+            if (err) {
+              alert('An error ocurred creating the file ' + err.message);
+            }
+            alert('The file has been succesfully saved');
+          });
+        }
+      } catch (error) {
+        console.log('error', error);
       }
     });
 });
