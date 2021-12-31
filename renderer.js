@@ -1,13 +1,8 @@
 const editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
-  // theme: 'pastel-on-dark',
   mode: 'javascript',
   lineNumbers: true,
   tabSize: 2,
-  // width: 450,
-  // height: 250,
 });
-
-// editor.setSize(500, 300);
 
 const openFile = document.getElementById('open-file');
 const saveFileBtn = document.getElementById('save-file');

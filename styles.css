@@ -49,10 +49,17 @@
 body {
   margin: 0px;
   font-family: "Raleway", sans-serif;
-  /* overflow: hidden; */
+  overflow: hidden; 
   max-width: none;
-  overflow: hidden;
+  overflow: hidden; 
 }
+/* body {
+  display: grid;
+  grid-template-rows: 100px 60% 1fr;
+  grid-template-columns: 50px 1fr 1fr 50px;
+
+  grid-template-areas: '. button browserForm .' '. codeEditor . . ' '. terminal terminal .';
+} */
 
 #editor {
   height: 100% !important;
@@ -64,6 +71,7 @@ body {
   /* resize: vertical; */
   overflow: auto !important;
   margin-bottom: .5rem;
+  /* grid-area: 'codeEditor'; */
 }
 
 #browser-form-section {
@@ -83,7 +91,16 @@ body {
   align-items: center;
   justify-content: center;
   margin-top: .3%;
+  /* grid-area: 'browserForm' !important; */
 }
+
+/* .buttons {
+  grid-area: 'button';
+}
+
+.outer-terminal {
+  grid-area: 'terminal';
+} */
 
 /* #terminal-container {
   position: absolute;
@@ -91,7 +108,7 @@ body {
   height: 20%;
   width: auto;
 } */
-.outer-terminal {
+/* .outer-terminal {
   display: inline-block;
   position:absolute;
   width: 100%;
@@ -99,17 +116,19 @@ body {
   max-width: none;
   left: -5px;
   bottom: -5px;
-  cursor: nwse-resize; /*resizer cursor*/
-}
-
+  cursor: nwse-resize; 
+} */
+/* 
 #terminal-container {
-  /* margin: 0 auto; */
+
   display: inline-block;
   height: 100% !important;
   width: 130% !important;
   position:relative;
   margin-left: 3%;
   margin-right: 3%;
-  padding-right: 10%;
+
   box-sizing: border-box;
-}
+} */
+
+/* try styling .xterm or .terminal*/

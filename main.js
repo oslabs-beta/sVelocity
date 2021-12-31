@@ -23,10 +23,9 @@ const createWindow = () => {
       preload: path.join(app.getAppPath(), 'preload.js'),
     },
   });
-  //set up broswer view
   win.loadFile('index.html');
 
-  win.webContents.openDevTools({mode: 'detach'});
+  win.webContents.openDevTools({ mode: 'detach' });
 
   console.log("widthhhhhhhhh", win.getBounds())
   console.log("SIZE:", win.getSize())
@@ -56,8 +55,6 @@ const createWindow = () => {
   view.setAutoResize({ horizontal: true })
 
   function devT() {
-    // devtools = new BrowserWindow();
-    // view.webContents.setDevToolsWebContents(view.webContents);
     view.webContents.openDevTools({ mode: 'right' });
     view.webContents.once('did-finish-load', function () {
       var windowBounds = view.getBounds();
@@ -65,13 +62,7 @@ const createWindow = () => {
       devtools.setSize(windowBounds.width / 2, windowBounds.height);
     });
   }
-    // win.on('move', function () {
-    //   var windowBounds = win.getBounds();
-    //   devtools.setPosition(windowBounds.x + windowBounds.width, windowBounds.y);
-    //   devtools.on('closed', function (){
-    //     devtools = null;
-    //   })
-    // });
+
   ipcMain.handle('openDevTools', () => {
     devT();
   });
@@ -98,7 +89,6 @@ app.whenReady().then(() => {
   });
 
   app.on('window-all-closed', () => {
-    // win.closeDevTools();
     app.quit();
   });
 });
@@ -108,6 +98,7 @@ ipcMain.handle("getFileFromUser", async (event) => {
     const files = await dialog.showOpenDialog({
       properties: ['openFile'],
       filters: [
+        // { name: 'All Files', extensions: ['*'] },
         { name: 'Markdown Files', extensions: ['md', 'mdown', 'markdown'] },
         { name: 'Svelte Files', extensions: ['.svelte'] },
         { name: 'Markup Files', extensions: ['.html'] },
@@ -154,7 +145,7 @@ ipcMain.handle('saveFile', (event, editorValue) => {
       }
     });
 });
-
+//spawning child process to run commands and then send the stdout to the renderer
 ipcMain.handle('runTerminal', (event, termCommand, args) => {
   if (termCommand == '' || args == '') {
     return;

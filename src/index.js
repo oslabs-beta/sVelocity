@@ -1,6 +1,5 @@
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
-// import { spawn } from 'node:child_process';
 
 const terminal = new Terminal();
 const fitAddon = new FitAddon();
@@ -8,16 +7,6 @@ terminal.loadAddon(fitAddon);
 terminal.open(document.getElementById('terminal-container'));
 fitAddon.fit();
 
-// const observer = new ResizeObserver(entries => {
-//   console.log(terminal)
-//   const cellWidth = terminal._core.renderer.dimensions.actualCellWidth
-//   const cellHeight = terminal._core.renderer.dimensions.actualCellHeight
-//   const cols = Math.floor(entries[0].contentRect.width / cellWidth)
-//   const rows = Math.floor(entries[0].contentRect.height / cellHeight)
-
-//   terminal.resize(cols, rows)
-// })
-// observer.observe(document.querySelector('.outer-terminal'))
 async function readClipboard() {
   if (!navigator.clipboard) {
     // Clipboard API not available
@@ -49,7 +38,6 @@ terminal.onKey(e => {
     console.log(cache);
     terminal.write("\b \b");
     cache.pop();
-    // cache.pop();
     console.log(cache);
     console.log(clipboard);
   }
