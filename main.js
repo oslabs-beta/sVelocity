@@ -10,9 +10,29 @@ const {
 const path = require('path');
 const { promises: fs } = require('fs');
 const Store = require('electron-store');
-const store = new Store();
 const exec = require('child_process');
 const spawn = require('cross-spawn');
+const store = new Store();
+
+store.set('allFiles', []);
+
+const filters = [
+  { name: 'Text Files', extensions: ['txt', 'docx'] },
+  { name: 'Markdown Files', extensions: ['md', 'mdown', 'markdown'] },
+  { name: 'Svelte Files', extensions: ['.svelte'] },
+  { name: 'Markup Files', extensions: ['.html'] },
+  { name: 'Javascript Files', extensions: ['.js'] },
+  { name: 'Style Files', extensions: ['.css'] },
+];
+
+const modes = {
+  js: 'text/javascript',
+  md: 'text/x-markdown',
+  mdown: 'text/x-markdown',
+  markdown: 'text/x-markdown',
+  html: 'text/html',
+  css: 'text/css',
+};
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -23,12 +43,10 @@ const createWindow = () => {
       preload: path.join(app.getAppPath(), 'preload.js'),
     },
   });
+
   win.loadFile('index.html');
 
   win.webContents.openDevTools({ mode: 'detach' });
-
-  console.log("widthhhhhhhhh", win.getBounds())
-  console.log("SIZE:", win.getSize())
 
   const view = new BrowserView();
   win.setBrowserView(view);
@@ -42,8 +60,7 @@ const createWindow = () => {
     try {
       url = browserURL;
       view.webContents.loadURL(url);
-    }
-    catch (error) {
+    } catch (error) {
       view.webContents.loadURL('https://http.cat/404');
     }
   });
@@ -51,8 +68,8 @@ const createWindow = () => {
   view.webContents.on('did-fail-load', function () {
     console.log(`failed to load ${url}`);
     view.webContents.loadURL('https://http.cat/404');
-  })
-  view.setAutoResize({ horizontal: true })
+  });
+  view.setAutoResize({ horizontal: true });
 
   function devT() {
     view.webContents.openDevTools({ mode: 'right' });
@@ -93,23 +110,42 @@ app.whenReady().then(() => {
   });
 });
 
-ipcMain.handle("getFileFromUser", async (event) => {
+ipcMain.handle('getFileFromUser', async (event) => {
   try {
     const files = await dialog.showOpenDialog({
       properties: ['openFile'],
-      filters: [
-        // { name: 'All Files', extensions: ['*'] },
-        { name: 'Markdown Files', extensions: ['md', 'mdown', 'markdown'] },
-        { name: 'Svelte Files', extensions: ['.svelte'] },
-        { name: 'Markup Files', extensions: ['.html'] },
-        { name: 'Javascript Files', extensions: ['.js'] },
-        { name: 'Style Files', extensions: ['.css'] },
-      ],
+      filters: [{ name: 'All Files', extensions: ['*'] }],
+      //filters: filters,
     });
+
     const file = files.filePaths[0];
     if (!file) return;
+
     const content = await fs.readFile(file, 'utf-8');
-    event.sender.send("eventFromMain", content);
+    allFiles = store.get('allFiles');
+
+    if (
+      allFiles.find((obj) => {
+        return obj.filepath === file;
+      })
+    ) {
+      return;
+    }
+
+    allFiles.push({
+      filepath: file,
+      filename: file.slice(file.lastIndexOf('/') + 1, file.length),
+      active: false,
+      editor: {
+        theme: 'pastel-on-dark',
+        mode: modes[file.slice(file.lastIndexOf('.') + 1, file.length)],
+        lineNumbers: true,
+        tabSize: 2,
+        value: content,
+      },
+    });
+    store.set('allFiles', allFiles);
+    event.sender.send('eventFromMain', content, allFiles);
   } catch (error) {
     console.log('error', error);
   }
@@ -121,30 +157,49 @@ ipcMain.handle('saveFile', (event, editorValue) => {
   dialog
     .showSaveDialog({
       buttonLabel: 'Save Button(:',
-      filters: [
-        { name: 'Text Files', extensions: ['txt', 'docx'] },
-        { name: 'Markdown Files', extensions: ['md', 'mdown', 'markdown'] },
-        { name: 'Svelte Files', extensions: ['.svelte'] },
-        { name: 'Markup Files', extensions: ['.html'] },
-        { name: 'Javascript Files', extensions: ['.js'] },
-        { name: 'Style Files', extensions: ['.css'] },
-      ],
+      filters: filters,
       properties: [],
     })
     .then(async (file) => {
-      if (file === undefined) {
-        console.log("You didn't save the file");
-        return;
-      } else {
-        const saveFile = await fs.writeFile(file.filePath, content, (err) => {
-          if (err) {
-            alert('An error ocurred creating the file ' + err.message);
-          }
-          alert('The file has been succesfully saved');
-        });
+      try {
+        if (file === undefined) {
+          console.log("You didn't save the file");
+          return;
+        } else {
+          await fs.writeFile(file.filePath, content, (err) => {
+            if (err) {
+              alert('An error ocurred creating the file ' + err.message);
+            }
+            alert('The file has been succesfully saved');
+          });
+        }
+      } catch (error) {
+        console.log('error', error);
       }
     });
 });
+
+ipcMain.handle('createFile', (event, fileName) => {
+  fs.writeFile(`/Users/elenizoump/Desktop/${fileName}`, '', (err) => {
+    if (err) {
+      alert('An error ocurred creating the file ' + err.message);
+    }
+    alert('The file has been succesfully created');
+  });
+});
+//   if (file === undefined) {
+//     console.log("You didn't save the file");
+//     return;
+//   } else {
+//     const saveFile = await fs.writeFile(file.filePath, content, (err) => {
+//       if (err) {
+//         alert('An error ocurred creating the file ' + err.message);
+//       }
+//       alert('The file has been succesfully saved');
+//     });
+//   }
+// });
+//});
 //spawning child process to run commands and then send the stdout to the renderer
 ipcMain.handle('runTerminal', (event, termCommand, args) => {
   if (termCommand == '' || args == '') {
@@ -152,7 +207,7 @@ ipcMain.handle('runTerminal', (event, termCommand, args) => {
   }
   console.log('arguments in main.js', termCommand + ' ' + args);
 
-  const ls = spawn(termCommand, args, { "cwd": '/tmp' });
+  const ls = spawn(termCommand, args, { cwd: '/tmp' });
 
   ls.stdout.on('data', (data) => {
     data = data.toString().trim();
@@ -167,4 +222,4 @@ ipcMain.handle('runTerminal', (event, termCommand, args) => {
   ls.on('close', (code) => {
     console.log(`child process exited with code ${code}`);
   });
-})
+});
