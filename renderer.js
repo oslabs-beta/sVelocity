@@ -8,6 +8,7 @@ const editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
 
 const openFile = document.getElementById('open-file');
 const saveFileBtn = document.getElementById('save-file');
+const newFileBtn = document.getElementById('new-file');
 const lastViewed = [];
 
 document
@@ -31,21 +32,13 @@ openFile.addEventListener('click', () => {
 });
 
 window.fileHandler.recieveMessage((content, allFiles) => {
-  console.log(allFiles, 'all files are here');
-
-  console.log('lastViewed after push', lastViewed);
-  //you need to store the data from message (allFiles) in a new variable, otherwise no access to them
   const allData = allFiles;
   const self = allData[allData.length - 1];
-  //console.log(self, 'self');
 
-  // if (lastViewed.length > 2) {
-  //   //console.log('removed');
-
-  //   lastViewed.shift();
-  //   console.log('after unshift', lastViewed);
-  // }
-  // lastViewed.push(self.filename);
+  if (lastViewed.length >= 2) {
+    lastViewed.shift();
+  }
+  lastViewed.push(self.filename);
 
   const ul = document.getElementsByTagName('UL');
   const tab = document.createElement('li');
@@ -61,17 +54,10 @@ window.fileHandler.recieveMessage((content, allFiles) => {
   tab.appendChild(btn);
 
   const tabs = document.getElementsByTagName('LI');
-  //on opening file make new tab active and add to lastViewed array
   self.active = true;
-  //check lastViewed array and if two items presents remove last one and add current as first
 
-  //when clicking on Tab
   txt.addEventListener('click', () => {
-    console.log('tab event listener');
-    //show editor instance
     editor.setValue(self.editor.value);
-    //set all other tabs to non-active
-    //set current tab active
     allData.forEach((obj) => {
       if (obj !== self) {
         obj.active = false;
@@ -79,51 +65,51 @@ window.fileHandler.recieveMessage((content, allFiles) => {
         obj.active = true;
       }
     });
-
-    console.log('lastViewed updated', lastViewed);
-    console.log('updated allData (active)', allData);
   });
 
-  //when close button clicked
   btn.addEventListener('click', () => {
-    console.log('close button event listener');
-    //if last tab is closed fall back to empty editor instance
     if (tabs.length <= 1) {
       editor.setValue('');
-      console.log('hi');
-      //set closed tab to non-active and remove it
       self.active = false;
       tab.remove();
     } else {
-      console.log('hey');
-      //if not last tab and tab was active (was currently viewed), set tab to non-active
       if (self.active) {
         self.active = false;
-        //show last viewed tab content and set that to active
         const lastViewedFile = allData.find(
           (obj) => obj.filename === lastViewed[1]
         );
         editor.setValue(lastViewedFile.editor.value);
         lastViewedFile.active = true;
+      } else {
       }
-      //if not last tab and tab was non-active (not currently viewed)
-      else {
-      }
-      //set closed tab to non-active and remove it
       tab.remove();
     }
-    //remove tab from allData (files array)
-
     allData.splice(allData.indexOf(self), 1);
-    console.log('updated allData', allData);
   });
-  console.log('tabbbbbbbbb', tab);
   ul[0].appendChild(tab);
-  editor.setValue(self.editor.value);
+  editor.setValue(content);
 });
 
 saveFileBtn.addEventListener('click', async () => {
   const editorValue = await editor.getValue();
 
   fileHandler.saveFile('saveFile', editorValue);
+});
+
+newFileBtn.addEventListener('click', async () => {
+  //const editorValue = await editor.getValue();
+  const ul = document.getElementsByTagName('UL');
+  //const form = document.createElement('form');
+  const input = document.createElement('input');
+  //form.setAttribute('id', 'form');
+  input.setAttribute('type', 'text');
+  input.setAttribute('id', 'input');
+  // form.addEventListener(('sbmit')=> {
+
+  // });
+  ul[0].appendChild(input);
+
+  const fileName = 'hello.js';
+
+  fileHandler.newFile('createFile', fileName);
 });

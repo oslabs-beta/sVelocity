@@ -79,29 +79,14 @@ ipcMain.handle('getFileFromUser', async (event) => {
     const files = await dialog.showOpenDialog({
       properties: ['openFile'],
       filters: [{ name: 'All Files', extensions: ['*'] }],
-      //filters: filters,
     });
-    // const dir = await dialog.showOpenDialog({
-    //   properties: ['openDirectory'],
-    // });
-
-    // const dirPath = dir.filePaths[0];
-
-    // const dirContents = await fs.readdir(dirPath, 'utf-8');
-
-    // console.log(dirContents);
 
     const file = files.filePaths[0];
     if (!file) return;
 
     const content = await fs.readFile(file, 'utf-8');
-
-    // push the new file item in allFiles array in store
-    // each new item will have a filepath, filename, mode, editor instance, active,
-
     allFiles = store.get('allFiles');
 
-    //check if file exists in store and don't create duplicate
     if (
       allFiles.find((obj) => {
         return obj.filepath === file;
@@ -110,7 +95,6 @@ ipcMain.handle('getFileFromUser', async (event) => {
       return;
     }
 
-    //file
     allFiles.push({
       filepath: file,
       filename: file.slice(file.lastIndexOf('/') + 1, file.length),
@@ -130,15 +114,7 @@ ipcMain.handle('getFileFromUser', async (event) => {
   }
 });
 
-// ipcMain.handle('getStoreValue', (event, key) => {
-//   return store.get(key);
-// });
-
 ipcMain.handle('saveFile', (event, editorValue) => {
-  //const content = editorValue.toString();
-
-  //console.log('editorValueMain2', editorValue);
-
   dialog
     .showSaveDialog({
       buttonLabel: 'Save Button(:',
@@ -162,4 +138,13 @@ ipcMain.handle('saveFile', (event, editorValue) => {
         console.log('error', error);
       }
     });
+});
+
+ipcMain.handle('createFile', (event, fileName) => {
+  fs.writeFile(`/Users/elenizoump/Desktop/${fileName}`, '', (err) => {
+    if (err) {
+      alert('An error ocurred creating the file ' + err.message);
+    }
+    alert('The file has been succesfully created');
+  });
 });
