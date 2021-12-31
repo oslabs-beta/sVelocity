@@ -1,10 +1,9 @@
 const webpack = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// const ChunksWebpackPlugin = require('chunks-webpack-plugin');
 const mode = process.env.NODE_ENV || 'development';
 const prod = mode === 'production';
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 
 const config = {
   entry: './src/index.js',
@@ -22,17 +21,6 @@ const config = {
     __filename: false,
   },
   mode: mode,
-
-  //   optimization: {
-  //     minimize: false,
-  //     splitChunks: {
-  //         chunks: "all",
-  //         name: false
-  //     },
-  // },
-  // resolve: {
-  //   modules: [path.join(__dirname, "src"), "node_modules"],
-  // },
   devtool: 'source-map',
   module: {
     rules: [

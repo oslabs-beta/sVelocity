@@ -5,10 +5,13 @@ const {
   ipcMain,
   nativeTheme,
   dialog,
+  ipcRenderer,
 } = require('electron');
 const path = require('path');
 const { promises: fs } = require('fs');
 const Store = require('electron-store');
+const exec = require('child_process');
+const spawn = require('cross-spawn');
 const store = new Store();
 
 store.set('allFiles', []);
@@ -33,21 +36,54 @@ const modes = {
 
 const createWindow = () => {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 800,
     webPreferences: {
+      nodeIntegration: true,
       preload: path.join(app.getAppPath(), 'preload.js'),
     },
   });
-  //set up broswer view
+
   win.loadFile('index.html');
-  win.webContents.openDevTools();
+
+  win.webContents.openDevTools({ mode: 'detach' });
 
   const view = new BrowserView();
   win.setBrowserView(view);
-  // view.setBounds({ x: 500, y: 0, width: 300, height: 300 });
-  // view.webContents.loadURL('https://github.com/oslabs-beta/sVelocity');
-  // view.setAutoResize({ horizontal: true, vertical: true });
+  view.setBounds({ x: 550, y: 68, width: 450, height: 480 });
+  let url;
+  if (!url) {
+    view.webContents.loadURL('https://svelte.dev/docs');
+  }
+
+  ipcMain.handle('getInputUrl', async (event, browserURL) => {
+    try {
+      url = browserURL;
+      view.webContents.loadURL(url);
+    } catch (error) {
+      view.webContents.loadURL('https://http.cat/404');
+    }
+  });
+
+  view.webContents.on('did-fail-load', function () {
+    console.log(`failed to load ${url}`);
+    view.webContents.loadURL('https://http.cat/404');
+  });
+  view.setAutoResize({ horizontal: true });
+
+  function devT() {
+    view.webContents.openDevTools({ mode: 'right' });
+    view.webContents.once('did-finish-load', function () {
+      var windowBounds = view.getBounds();
+      devtools.setPosition(windowBounds.x + windowBounds.width, windowBounds.y);
+      devtools.setSize(windowBounds.width / 2, windowBounds.height);
+    });
+  }
+
+  ipcMain.handle('openDevTools', () => {
+    devT();
+  });
+
   ipcMain.handle('dark-mode:toggle', () => {
     if (nativeTheme.shouldUseDarkColors) {
       nativeTheme.themeSource = 'light';
@@ -79,6 +115,7 @@ ipcMain.handle('getFileFromUser', async (event) => {
     const files = await dialog.showOpenDialog({
       properties: ['openFile'],
       filters: [{ name: 'All Files', extensions: ['*'] }],
+      //filters: filters,
     });
 
     const file = files.filePaths[0];
@@ -115,6 +152,8 @@ ipcMain.handle('getFileFromUser', async (event) => {
 });
 
 ipcMain.handle('saveFile', (event, editorValue) => {
+  const content = editorValue.toString();
+
   dialog
     .showSaveDialog({
       buttonLabel: 'Save Button(:',
@@ -146,5 +185,41 @@ ipcMain.handle('createFile', (event, fileName) => {
       alert('An error ocurred creating the file ' + err.message);
     }
     alert('The file has been succesfully created');
+  });
+});
+//   if (file === undefined) {
+//     console.log("You didn't save the file");
+//     return;
+//   } else {
+//     const saveFile = await fs.writeFile(file.filePath, content, (err) => {
+//       if (err) {
+//         alert('An error ocurred creating the file ' + err.message);
+//       }
+//       alert('The file has been succesfully saved');
+//     });
+//   }
+// });
+//});
+//spawning child process to run commands and then send the stdout to the renderer
+ipcMain.handle('runTerminal', (event, termCommand, args) => {
+  if (termCommand == '' || args == '') {
+    return;
+  }
+  console.log('arguments in main.js', termCommand + ' ' + args);
+
+  const ls = spawn(termCommand, args, { cwd: '/tmp' });
+
+  ls.stdout.on('data', (data) => {
+    data = data.toString().trim();
+    event.sender.send('terminalOutput', data);
+    console.log(`stdout: ${data}`);
+  });
+
+  ls.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  ls.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
   });
 });

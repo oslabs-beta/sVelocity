@@ -1,31 +1,25 @@
 const editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
-  theme: 'pastel-on-dark',
   mode: 'javascript',
   lineNumbers: true,
   tabSize: 2,
-  value: 'console.log("Hello, World");',
 });
 
 const openFile = document.getElementById('open-file');
 const saveFileBtn = document.getElementById('save-file');
 const newFileBtn = document.getElementById('new-file');
 const lastViewed = [];
+const seeBrowser = document.getElementById('browser-btn');
+const openDev = document.getElementById('devtools-btn');
 
-document
-  .getElementById('toggle-dark-mode')
-  .addEventListener('click', async () => {
-    const isDarkMode = await window.darkMode.toggle();
-    document.getElementById('theme-source').innerHTML = isDarkMode
-      ? 'Dark'
-      : 'Light';
-  });
+document.getElementById('toggle-dark-mode').addEventListener('click', () => {
+  window.darkMode.toggle();
+});
 
-document
-  .getElementById('reset-to-system')
-  .addEventListener('click', async () => {
-    await window.darkMode.system();
-    document.getElementById('theme-source').innerHTML = 'System';
-  });
+// document
+//   .getElementById('reset-to-system')
+//   .addEventListener('click', () => {
+//   window.darkMode.system();
+//   });
 
 openFile.addEventListener('click', () => {
   window.fileHandler.getFileFromUser();
@@ -73,10 +67,11 @@ window.fileHandler.recieveMessage((content, allFiles) => {
       self.active = false;
       tab.remove();
     } else {
+      console.log('lastviewed', lastViewed);
       if (self.active) {
         self.active = false;
         const lastViewedFile = allData.find(
-          (obj) => obj.filename === lastViewed[1]
+          (obj) => obj.filename === lastViewed[0]
         );
         editor.setValue(lastViewedFile.editor.value);
         lastViewedFile.active = true;
@@ -89,6 +84,21 @@ window.fileHandler.recieveMessage((content, allFiles) => {
   ul[0].appendChild(tab);
   editor.setValue(content);
 });
+
+seeBrowser.addEventListener('click', () => {
+  const browserURL = document.getElementById('url-field').value;
+  console.log(browserURL);
+  window.browserView.getInputUrl('getInputUrl', browserURL);
+});
+
+// openFile.addEventListener('click', async () => {
+//   // const file =
+//   await window.fileHandler.getFileFromUser();
+//   await window.fileHandler.recieveMessage((content) => {
+//     console.log("console logging from the renderer:", content);
+//     editor.setValue(content);
+//   });
+//
 
 saveFileBtn.addEventListener('click', async () => {
   const editorValue = await editor.getValue();
@@ -112,4 +122,8 @@ newFileBtn.addEventListener('click', async () => {
   const fileName = 'hello.js';
 
   fileHandler.newFile('createFile', fileName);
+});
+
+openDev.addEventListener('click', async () => {
+  devToolsHandler.openDevTools('openDevTools');
 });
