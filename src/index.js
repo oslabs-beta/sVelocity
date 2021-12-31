@@ -1,57 +1,82 @@
-//const { ipcRenderer } = window.require('electron');
-// var app = new App({
-//   target: document.getElementById('editor')
-// });
-// export default app;
-// const openFile = document.getElementById("open-file");
-// const textA = document.querySelector('#editor');
-// const editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
-//   theme: 'pastel-on-dark',
-//   mode: 'javascript',
-//   lineNumbers: true,
-//   tabSize: 2,
-//   value: 'console.log("Hello, World");'
-// });
+import { Terminal } from 'xterm';
+import { FitAddon } from 'xterm-addon-fit';
 
-// const editorVal = editor.getValue();
-// console.log(editorVal);
-// textA.value = openFile.addEventListener("click", async () => {
-//   const result = await window.fileHandler.getFileFromUser();
-//   return result;
-// })
+const terminal = new Terminal();
+const fitAddon = new FitAddon();
+terminal.loadAddon(fitAddon);
+terminal.open(document.getElementById('terminal-container'));
+fitAddon.fit();
 
-// CodeMirror(document.querySelector('#editor'), {
-//   lineNumbers: true,
-//   tabSize: 2,
-//   value: 'console.log("Hello, World");',
-// });
+async function readClipboard() {
+  if (!navigator.clipboard) {
+    // Clipboard API not available
+    return
+  }
 
-// var myCodeMirror = CodeMirror(
-//   function (elt) {
-//     myTextArea.parentNode.replaceChild(elt, myTextArea);
-//   },
-//   { value: myTextArea.value }
-// );
-// const openFile = document.getElementById('open-file');
+  try {
+    const text = await navigator.clipboard.readText();
+    return text;
+  } catch (err) {
+    console.error('Failed to copy!', err)
+  }
+}
+let clipboard = readClipboard();
 
-// openFile.addEventListener('click', async () => {
-//   await window.fileHandler.getFileFromUser();
-// });
+let cache = [];
+let input;
+terminal.onKey(e => {
+  // console.log(e.key);
+  terminal.write(e.key);
+  if (e.key !== '\r' && e.key !== '\x03' && e.key !== '\x16' && e.key.charCodeAt(0) !== 127) {
+    cache.push(e.key);
+  }
+  console.log(cache)
+  if (e.key == '\r')
+    terminal.write('\n');
+  const code = e.key.charCodeAt(0);
+  if (code == 127) {   //Backspace
+    console.log(cache);
+    terminal.write("\b \b");
+    cache.pop();
+    console.log(cache);
+    console.log(clipboard);
+  }
+  //paste using the keys control-v
+  if (e.key === '\x03' || e.key === '\x16') {
+    console.log(clipboard);
+    clipboard.then(result => {
+      terminal.write(result);
+      cache.push(result);
+      console.log(`should have ${result}`, cache);
+    })
+  }
+})
 
-// var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-//   styleActiveLine: true,
-//   lineNumbers: true,
-//   matchBrackets: true
-// });
+const enterPressed = terminal.onLineFeed(async (e) => {
+  input = cache.join('');
+  console.log('input in index.js', input);
 
-// const { ipcRenderer } = win.require('electron');
-// // const Store = require('electron-store');
-// // const store = new Store();
-// // ipcRenderer.on('getFileFromUser', (event, data) => {
-// //   store.set('openedFile', data);
-// // });
-// // console.log("what's this store?", store.get('openedFile'));
+  if (input == 'clear') {
+    terminal.clear();
+  }
 
-// win.fileHandler.getFileFromUser((data) => {
-//   console.log(`Received ${data} from main process`);
-// });
+  cache.splice(0, cache.length);  // Empty buffer
+
+  console.log('should be empty cache', cache);
+  if (input !== 'clear') {
+    const termCommand = input.slice(0, input.indexOf(" "))
+    console.log('command in index.js', termCommand);
+    let args = input.slice(input.indexOf(" ") + 1, input.length).split(" ");
+    console.log('logging argssss', args);
+
+    await terminalHandler.runTerminal('runTerminal', termCommand, args);
+  }
+});
+
+enterPressed.then(
+  terminalHandler.terminalOutput((content) => {
+    console.log("console logging from the renderer:", content);
+    terminal.write(content);
+    terminal.write('\n');
+    terminal.write('\x1b[2K\r')
+  }));

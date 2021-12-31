@@ -1,5 +1,5 @@
 const { contextBridge, ipcRenderer } = require('electron');
-const { remote } = require('electron');
+// const { remote } = require('electron');
 
 contextBridge.exposeInMainWorld('darkMode', {
   toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
@@ -7,10 +7,34 @@ contextBridge.exposeInMainWorld('darkMode', {
 });
 
 contextBridge.exposeInMainWorld(
+  'browserView',
+  {
+    getInputUrl: (channel, browserURL) => ipcRenderer.invoke('getInputUrl', browserURL)
+  },
+);
+
+contextBridge.exposeInMainWorld(
+  'devToolsHandler',
+  {
+    openDevTools: (channel) => ipcRenderer.invoke('openDevTools')
+  }
+)
+contextBridge.exposeInMainWorld(
+  'terminalHandler',
+  {
+    runTerminal: (channel, termCommand, args) => ipcRenderer.invoke('runTerminal', termCommand, args),
+    terminalOutput: (callback) => ipcRenderer.on('terminalOutput', async function (event, content) {
+      await callback(content);
+    })
+  },
+);
+
+
+contextBridge.exposeInMainWorld(
   'fileHandler',
   {
-      getFileFromUser: (event) => ipcRenderer.invoke("getFileFromUser"),
-      recieveMessage: (callback) => ipcRenderer.on("eventFromMain",  async function(event, content) {
+    getFileFromUser: (event) => ipcRenderer.invoke("getFileFromUser"),
+    recieveMessage: (callback) => ipcRenderer.on("eventFromMain", async function (event, content) {
       // console.log("this is the message inside the ipcOn:", content);
       await callback(content);
     }),
