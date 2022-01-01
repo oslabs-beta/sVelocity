@@ -40,11 +40,12 @@ const createWindow = () => {
     height: 800,
     webPreferences: {
       nodeIntegration: true,
-      preload: path.join(app.getAppPath(), 'preload.js'),
+      preload: path.resolve(app.getAppPath(), 'preload.js'),
     },
   });
 
-  win.loadFile('index.html');
+  // win.loadFile('index.html');
+  win.loadFile(path.resolve(__dirname, 'index.html'));
 
   win.webContents.openDevTools({ mode: 'detach' });
 
