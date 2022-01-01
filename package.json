@@ -6,12 +6,15 @@
   "author": "",
   "license": "MIT",
   "scripts": {
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
     "start": "electron .",
     "dev": "electron . webpack --watch --progress",
     "build": "webpack"
   },
   "devDependencies": {
     "electron": "^16.0.4",
+    "electron-builder": "^22.14.5",
     "file-loader": "^6.2.0",
     "webpack-cli": "^4.9.1"
   },
@@ -20,7 +23,9 @@
     "css-loader": "^6.5.1",
     "electron-reload": "^2.0.0-alpha.1",
     "electron-store": "^8.0.1",
+    "fix-path": "^4.0.0",
     "mini-css-extract-plugin": "^2.4.5",
+    "shell-path": "^3.0.0",
     "style-loader": "^3.3.1",
     "svelte": "^3.44.2",
     "svelte-loader": "^3.1.2",

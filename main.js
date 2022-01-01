@@ -13,7 +13,7 @@ const Store = require('electron-store');
 const exec = require('child_process');
 const spawn = require('cross-spawn');
 const store = new Store();
-
+// const { shellPath } = require('shell-path');
 store.set('allFiles', []);
 
 const filters = [
@@ -40,11 +40,12 @@ const createWindow = () => {
     height: 800,
     webPreferences: {
       nodeIntegration: true,
-      preload: path.join(app.getAppPath(), 'preload.js'),
+      preload: path.resolve(app.getAppPath(), 'preload.js'),
     },
   });
 
-  win.loadFile('index.html');
+  // win.loadFile('index.html');
+  win.loadFile(path.resolve(__dirname, 'index.html'));
 
   win.webContents.openDevTools({ mode: 'detach' });
 
@@ -201,14 +202,33 @@ ipcMain.handle('createFile', (event, fileName) => {
 // });
 //});
 //spawning child process to run commands and then send the stdout to the renderer
+
+// function patchSpawnForASAR() {
+//   const originalSpawn = child_process.spawn;
+//   const asarSpawn = (command, args, options) => {
+//     return originalSpawn(
+//       command,
+//       args
+//         ? args.map((arg) => arg.replace('app.asar', 'app.asar.unpacked'))
+//         : undefined,
+//       options
+//     );
+//   };
+//   child_process.spawn = asarSpawn;
+// }
+
 ipcMain.handle('runTerminal', (event, termCommand, args) => {
   if (termCommand == '' || args == '') {
     return;
   }
   console.log('arguments in main.js', termCommand + ' ' + args);
-
-  const ls = spawn(termCommand, args, { cwd: '/tmp' });
-
+  // await shellPath();
+  const ls = spawn(termCommand, args, {
+    cwd: '/Users/elenizoump/Desktop/hello',
+  });
+  console.log('this is the terminal command from main.js', termCommand);
+  console.log('these are arguments', args);
+  console.log(process.env.PATH);
   ls.stdout.on('data', (data) => {
     data = data.toString().trim();
     event.sender.send('terminalOutput', data);

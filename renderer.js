@@ -27,33 +27,33 @@ openFile.addEventListener('click', () => {
 
 window.fileHandler.recieveMessage((content, allFiles) => {
   const allData = allFiles;
-  const self = allData[allData.length - 1];
+  const selfies = allData[allData.length - 1];
 
   if (lastViewed.length >= 2) {
     lastViewed.shift();
   }
-  lastViewed.push(self.filename);
+  lastViewed.push(selfies.filename);
 
   const ul = document.getElementsByTagName('UL');
   const tab = document.createElement('li');
   const txt = document.createElement('h5');
   const btn = document.createElement('button');
 
-  txt.innerText = `${self.filename}`;
+  txt.innerText = `${selfies.filename}`;
   btn.innerText = 'x';
-  tab.setAttribute('class', self.active);
+  tab.setAttribute('class', selfies.active);
   txt.setAttribute('class', 'text');
   btn.setAttribute('class', 'close');
   tab.appendChild(txt);
   tab.appendChild(btn);
 
   const tabs = document.getElementsByTagName('LI');
-  self.active = true;
+  selfies.active = true;
 
   txt.addEventListener('click', () => {
-    editor.setValue(self.editor.value);
+    editor.setValue(selfies.editor.value);
     allData.forEach((obj) => {
-      if (obj !== self) {
+      if (obj !== selfies) {
         obj.active = false;
       } else {
         obj.active = true;
@@ -64,12 +64,12 @@ window.fileHandler.recieveMessage((content, allFiles) => {
   btn.addEventListener('click', () => {
     if (tabs.length <= 1) {
       editor.setValue('');
-      self.active = false;
+      selfies.active = false;
       tab.remove();
     } else {
       console.log('lastviewed', lastViewed);
-      if (self.active) {
-        self.active = false;
+      if (selfies.active) {
+        selfies.active = false;
         const lastViewedFile = allData.find(
           (obj) => obj.filename === lastViewed[0]
         );
@@ -79,7 +79,7 @@ window.fileHandler.recieveMessage((content, allFiles) => {
       }
       tab.remove();
     }
-    allData.splice(allData.indexOf(self), 1);
+    allData.splice(allData.indexOf(selfies), 1);
   });
   ul[0].appendChild(tab);
   editor.setValue(content);
@@ -90,15 +90,6 @@ seeBrowser.addEventListener('click', () => {
   console.log(browserURL);
   window.browserView.getInputUrl('getInputUrl', browserURL);
 });
-
-// openFile.addEventListener('click', async () => {
-//   // const file =
-//   await window.fileHandler.getFileFromUser();
-//   await window.fileHandler.recieveMessage((content) => {
-//     console.log("console logging from the renderer:", content);
-//     editor.setValue(content);
-//   });
-//
 
 saveFileBtn.addEventListener('click', async () => {
   const editorValue = await editor.getValue();

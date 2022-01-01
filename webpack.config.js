@@ -4,14 +4,13 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const mode = process.env.NODE_ENV || 'development';
 const prod = mode === 'production';
 
-
 const config = {
   entry: './src/index.js',
   output: {
     globalObject: 'self',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'build'),
     filename: 'webpack-bundle.js',
-    publicPath: './dist/',
+    publicPath: './build/',
   },
   // Compile for Electron for main process.
   target: 'electron-main',
