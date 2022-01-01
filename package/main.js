@@ -13,7 +13,7 @@ const Store = require('electron-store');
 const exec = require('child_process');
 const spawn = require('cross-spawn');
 const store = new Store();
-// const { shellPath } = require('shell-path');
+
 store.set('allFiles', []);
 
 const filters = [
@@ -202,33 +202,14 @@ ipcMain.handle('createFile', (event, fileName) => {
 // });
 //});
 //spawning child process to run commands and then send the stdout to the renderer
-
-// function patchSpawnForASAR() {
-//   const originalSpawn = child_process.spawn;
-//   const asarSpawn = (command, args, options) => {
-//     return originalSpawn(
-//       command,
-//       args
-//         ? args.map((arg) => arg.replace('app.asar', 'app.asar.unpacked'))
-//         : undefined,
-//       options
-//     );
-//   };
-//   child_process.spawn = asarSpawn;
-// }
-
 ipcMain.handle('runTerminal', (event, termCommand, args) => {
   if (termCommand == '' || args == '') {
     return;
   }
   console.log('arguments in main.js', termCommand + ' ' + args);
-  // await shellPath();
-  const ls = spawn(termCommand, args, {
-    cwd: '/Users/elenizoump/Desktop/hello',
-  });
-  console.log('this is the terminal command from main.js', termCommand);
-  console.log('these are arguments', args);
-  console.log(process.env.PATH);
+
+  const ls = spawn(termCommand, args, { cwd: '/tmp' });
+
   ls.stdout.on('data', (data) => {
     data = data.toString().trim();
     event.sender.send('terminalOutput', data);

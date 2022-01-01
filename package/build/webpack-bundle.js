@@ -105,26 +105,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var xterm_addon_fit__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(xterm_addon_fit__WEBPACK_IMPORTED_MODULE_1__);
 
 
+
 const terminal = new xterm__WEBPACK_IMPORTED_MODULE_0__.Terminal();
 const fitAddon = new xterm_addon_fit__WEBPACK_IMPORTED_MODULE_1__.FitAddon();
 terminal.loadAddon(fitAddon);
 terminal.open(document.getElementById('terminal-container'));
 fitAddon.fit();
 
-// async function readClipboard() {
-//   if (!navigator.clipboard) {
-//     // Clipboard API not available
-//     return;
-//   }
+async function readClipboard() {
+  if (!navigator.clipboard) {
+    // Clipboard API not available
+    return;
+  }
 
-//   try {
-//     const text = await navigator.clipboard.readText();
-//     return text;
-//   } catch (err) {
-//     console.error('Failed to copy!', err);
-//   }
-// }
-// let clipboard = readClipboard();
+  try {
+    const text = await navigator.clipboard.readText();
+    return text;
+  } catch (err) {
+    console.error('Failed to copy!', err);
+  }
+}
+let clipboard = readClipboard();
 
 let cache = [];
 let input;
@@ -148,7 +149,7 @@ terminal.onKey((e) => {
     terminal.write('\b \b');
     cache.pop();
     console.log(cache);
-    // console.log(clipboard);
+    console.log(clipboard);
   }
   //paste using the keys control-v
   if (e.key === '\x03' || e.key === '\x16') {
@@ -163,26 +164,23 @@ terminal.onKey((e) => {
 
 terminal
   .onLineFeed(async (e) => {
-    try {
-      input = cache.join('');
-      console.log('input in index.js', input);
+    input = cache.join('');
+    console.log('input in index.js', input);
 
-      if (input == 'clear') {
-        terminal.clear();
-      }
+    if (input == 'clear') {
+      terminal.clear();
+    }
 
-      cache.splice(0, cache.length); // Empty buffer
+    cache.splice(0, cache.length); // Empty buffer
 
-      console.log('should be empty cache', cache);
-      if (input !== 'clear') {
-        const termCommand = input.slice(0, input.indexOf(' '));
-        console.log('command in index.js', termCommand);
-        let args = input.slice(input.indexOf(' ') + 1, input.length).split(' ');
-        console.log('logging argssss', args);
-        await terminalHandler.runTerminal('runTerminal', termCommand, args);
-      }
-    } catch (error) {
-      console.log('error', error);
+    console.log('should be empty cache', cache);
+    if (input !== 'clear') {
+      const termCommand = input.slice(0, input.indexOf(' '));
+      console.log('command in index.js', termCommand);
+      let args = input.slice(input.indexOf(' ') + 1, input.length).split(' ');
+      console.log('logging argssss', args);
+
+      await terminalHandler.runTerminal('runTerminal', termCommand, args);
     }
   })
   .then(
