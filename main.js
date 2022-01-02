@@ -225,7 +225,7 @@ ipcMain.handle('runTerminal', (event, termCommand, args = ['']) => {
   console.log('arguments in main.js', termCommand + ' ' + args);
   // await shellPath();
   const ls = spawn('source $HOME/.zshrc;' + termCommand, args, {
-    cwd: '/Users/elenizoump/Desktop/hello',
+    cwd: '/tmp',
     shell: true,
   });
   console.log('this is the terminal command from main.js', termCommand);
