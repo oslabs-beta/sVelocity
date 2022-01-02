@@ -45,21 +45,20 @@
     background: white;
   }
 }
+html {
+  max-height: 100vh;
+}
 
 body {
   margin: 0px;
+  height: 100vh;
+  padding: 0;
   font-family: 'Raleway', sans-serif;
-  overflow: hidden;
-  max-width: none;
-  overflow: hidden;
-}
-/* body {
   display: grid;
-  grid-template-rows: 100px 60% 1fr;
-  grid-template-columns: 50px 1fr 1fr 50px;
-
-  grid-template-areas: '. button browserForm .' '. codeEditor . . ' '. terminal terminal .';
-} */
+  grid-template-areas: "sidenav form form" "sidenav codemirror ." "sidenav terminal .";
+  grid-template-rows: 50px 1fr 200px;
+  grid-template-columns: 150px 1fr 200px;
+}
 
 li {
   display: block;
@@ -68,25 +67,26 @@ li {
 h5.text {
   display: inline-block;
 }
-#editor {
+/* #editor {
   height: 100% !important;
-}
+} */
 .CodeMirror {
-  width: 55%;
-  height: 30rem;
-  /* height: 90% !important; */
-  /* resize: vertical; */
+  grid-area: codemirror;
+  width: 60%;
+  height: 100%;
   overflow: auto !important;
   margin-bottom: 0.5rem;
-  /* grid-area: 'codeEditor'; */
+  margin-left: 0.8rem;
+}
+.xterm-viewport {
+  width: 60% !important;
+  /* height: 20vh; */
 }
 
 #browser-form-section {
   float: right;
-  /* margin: 0 1.5%; */
   width: 30%;
   margin-left: 50%;
-  /* margin-top: .5%; */
 }
 
 #browser-form {
@@ -94,48 +94,74 @@ h5.text {
 }
 
 .header-container {
-  display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 0.3%;
-  /* grid-area: 'browserForm' !important; */
-}
-
-/* .buttons {
-  grid-area: 'button';
+  grid-area: form;
 }
 
 .outer-terminal {
-  grid-area: 'terminal';
-} */
+  grid-area: terminal;
+  margin-left: .8rem;
+  /* height: 50%; */
+}
 
-/* #terminal-container {
-  position: absolute;
-  bottom: 0;
-  height: 20%;
-  width: auto;
-} */
-/* .outer-terminal {
-  display: inline-block;
-  position:absolute;
-  width: 100%;
-  height: 28%;
-  max-width: none;
-  left: -5px;
-  bottom: -5px;
-  cursor: nwse-resize; 
-} */
-/* 
-#terminal-container {
 
-  display: inline-block;
-  height: 100% !important;
-  width: 130% !important;
-  position:relative;
-  margin-left: 3%;
-  margin-right: 3%;
+.xterm-screen {
+  height: 200px !important;
+}
 
-  box-sizing: border-box;
-} */
+.xterm-text-layer {
+  height: 200px !important;
+}
 
-/* try styling .xterm or .terminal*/
+.xterm-selection-layer {
+  height: 200px !important;
+}
+
+.xterm-link-layer {
+  height: 200px !important;
+}
+
+.xterm-cursor-layer {
+  height: 200px !important;
+}
+
+.sidebar {
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 16px;
+  grid-area: sidenav;
+}
+
+/* Style sidebar links */
+.sidebar a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  display: block;
+}
+
+/* Style links on mouse-over */
+.sidebar a:hover {
+  color: #f1f1f1;
+}
+
+/* Style the main content */
+.main {
+  margin-left: 160px; /* Same as the width of the sidenav */
+  padding: 0px 10px;
+}
+
+/* Add media queries for small screens (when the height of the screen is less than 450px, add a smaller padding and font-size) */
+@media screen and (max-height: 450px) {
+  .sidebar {padding-top: 15px;}
+  .sidebar a {font-size: 18px;}
+}
