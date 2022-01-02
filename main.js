@@ -203,21 +203,16 @@ ipcMain.handle('createFile', (event, fileName) => {
 // });
 //});
 
-//spawning child process to run commands and then send the stdout to the renderer
-ipcMain.handle('runTerminal', (event, termCommand, args) => {
-  if (termCommand == '' || args == '') {
+ipcMain.handle('runTerminal', (event, termCommand, args = ['']) => {
+  if (termCommand == '') {
     return;
   }
+
   console.log('arguments in main.js', termCommand + ' ' + args);
   // await shellPath();
-  fixPath(); //try using fix path again? 
-  //also try using something in here:
-//   require('child_process').spawn('node', ['-pe', 'process.env.PATH'], {
-//     cwd: process.cwd() + '/backend',
-//     stdio: 'inherit'
-// }); 
-  const ls = spawn(termCommand, args, {
-    cwd: '/Users/tehyarassman/Desktop/test',
+  const ls = spawn('source $HOME/.zshrc;' + termCommand, args, {
+    cwd: '/tmp',
+    shell: true,
   });
   console.log('this is the terminal command from main.js', termCommand);
   console.log('these are arguments', args);
