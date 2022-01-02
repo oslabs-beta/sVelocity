@@ -10,11 +10,12 @@ const {
 const path = require('path');
 const { promises: fs } = require('fs');
 const Store = require('electron-store');
-const exec = require('child_process');
+// const exec = require('child_process');
 const spawn = require('cross-spawn');
 const store = new Store();
 // const { shellPath } = require('shell-path');
 store.set('allFiles', []);
+// const fixPath = require('fix-path');
 
 const filters = [
   { name: 'Text Files', extensions: ['txt', 'docx'] },
@@ -201,30 +202,22 @@ ipcMain.handle('createFile', (event, fileName) => {
 //   }
 // });
 //});
+
 //spawning child process to run commands and then send the stdout to the renderer
-
-// function patchSpawnForASAR() {
-//   const originalSpawn = child_process.spawn;
-//   const asarSpawn = (command, args, options) => {
-//     return originalSpawn(
-//       command,
-//       args
-//         ? args.map((arg) => arg.replace('app.asar', 'app.asar.unpacked'))
-//         : undefined,
-//       options
-//     );
-//   };
-//   child_process.spawn = asarSpawn;
-// }
-
 ipcMain.handle('runTerminal', (event, termCommand, args) => {
   if (termCommand == '' || args == '') {
     return;
   }
   console.log('arguments in main.js', termCommand + ' ' + args);
   // await shellPath();
+  fixPath(); //try using fix path again? 
+  //also try using something in here:
+//   require('child_process').spawn('node', ['-pe', 'process.env.PATH'], {
+//     cwd: process.cwd() + '/backend',
+//     stdio: 'inherit'
+// }); 
   const ls = spawn(termCommand, args, {
-    cwd: '/Users/elenizoump/Desktop/hello',
+    cwd: '/Users/tehyarassman/Desktop/test',
   });
   console.log('this is the terminal command from main.js', termCommand);
   console.log('these are arguments', args);
