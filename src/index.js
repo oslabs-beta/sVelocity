@@ -70,9 +70,14 @@ terminal
 
       console.log('should be empty cache', cache);
       if (input !== 'clear') {
-        const termCommand = input.slice(0, input.indexOf(' '));
+        const indexOfWhitespace = input.indexOf(' ');
+        const termCommand =
+          indexOfWhitespace === -1 ? input : input.slice(0, indexOfWhitespace);
         console.log('command in index.js', termCommand);
-        let args = input.slice(input.indexOf(' ') + 1, input.length).split(' ');
+        let args =
+          indexOfWhitespace === -1
+            ? undefined
+            : input.slice(indexOfWhitespace + 1, input.length).split(' ');
         console.log('logging argssss', args);
         await terminalHandler.runTerminal('runTerminal', termCommand, args);
       }

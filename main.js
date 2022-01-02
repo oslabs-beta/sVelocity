@@ -217,14 +217,16 @@ ipcMain.handle('createFile', (event, fileName) => {
 //   child_process.spawn = asarSpawn;
 // }
 
-ipcMain.handle('runTerminal', (event, termCommand, args) => {
-  if (termCommand == '' || args == '') {
+ipcMain.handle('runTerminal', (event, termCommand, args = ['']) => {
+  if (termCommand == '') {
     return;
   }
+
   console.log('arguments in main.js', termCommand + ' ' + args);
   // await shellPath();
-  const ls = spawn(termCommand, args, {
-    cwd: '/Users/elenizoump/Desktop/hello',
+  const ls = spawn('source $HOME/.zshrc;' + termCommand, args, {
+    cwd: '/tmp',
+    shell: true,
   });
   console.log('this is the terminal command from main.js', termCommand);
   console.log('these are arguments', args);
