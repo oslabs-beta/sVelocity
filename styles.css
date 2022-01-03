@@ -1,6 +1,6 @@
 @media (prefers-color-scheme: dark) {
   body {
-    background: #3e4f88;
+    background: #334272;
     color: white;
   }
 
@@ -30,6 +30,10 @@
     background: #354475;
   }
 
+  .xterm-viewport {
+    background-color: #1b2e5c !important;
+  }
+
   .sidebar {
     background-color: #1b2e5c;
   }
@@ -40,6 +44,25 @@
   
   a:active {
     box-shadow: 0 3.5px #111d3a;
+    transform: translateY(4px);
+  }
+
+  #url-field {
+    border: 1px solid #111d3a;
+  }
+
+  #browser-btn {
+    background-color: #111d3a;
+    border: 1px solid #b9dff0;
+  }
+
+  #browser-btn:hover {
+    border-color: #3e3979;
+    box-shadow: 10px 5px 5px #111d3a;
+  }
+
+  #browser-btn:active {
+    box-shadow: 0 3.5px #354475;
     transform: translateY(4px);
   }
 }
@@ -76,6 +99,10 @@
     background: #fed8be;
   }
 
+  #url-field {
+    border: 1px solid #4840ac;
+  }
+
   .sidebar {
     background-color: #7a72e9;
   }
@@ -85,6 +112,21 @@
   }
   
   a:active {
+    box-shadow: 0 3.5px #4840ac;
+    transform: translateY(4px);
+  }
+
+  #browser-btn {
+    background-color: #4840ac;
+    border: 1px solid #7a72e9;
+  }
+
+  #browser-btn:hover {
+    border-color: #3e3979;
+    box-shadow: 10px 5px 5px #3e3979;
+  }
+
+  #browser-btn:active {
     box-shadow: 0 3.5px #4840ac;
     transform: translateY(4px);
   }
@@ -101,15 +143,13 @@ body {
   display: grid;
   grid-template-areas: "sidenav tabs tabs" "sidenav codemirror ." "sidenav terminal .";
   grid-template-rows: 50px 1fr 200px;
-  grid-template-columns: 150px 1fr 200px;
+  grid-template-columns: 150px 1fr 96px;
 }
 
 li {
   display: inline-block;
   margin-right: 8px;
   border-bottom: 0;
-  /* border-top-right-radius: 8%; */
-  /* border-top-left-radius: 8%; */
   height: fit-content;
 }
 
@@ -124,9 +164,7 @@ h5.text {
   display: inline-block;
   margin: 10px;
 }
-/* #editor {
-  height: 100% !important;
-} */
+
 .CodeMirror {
   grid-area: codemirror;
   width: 60%;
@@ -137,30 +175,11 @@ h5.text {
 }
 .xterm-viewport {
   width: 61% !important;
-  /* height: 20vh; */
 }
-
-/* #browser-form-section {
-  float: right;
-  width: 30%;
-  margin-left: 50%;
-}
-
-#browser-form {
-  margin-top: 0.5%;
-} */
-
-/* .header-container {
-  align-items: center;
-  justify-content: center;
-  margin-top: 0.3%;
-  grid-area: form;
-} */
 
 .outer-terminal {
   grid-area: terminal;
   margin-left: .8rem;
-  /* height: 50%; */
 }
 
 
@@ -203,6 +222,8 @@ h5.text {
   font-size: 20px;
   color: #818181;
   display: block;
+  /* margin-left: auto;
+  margin-right:auto; */
 }
 
 /* Style links on mouse-over */
@@ -217,30 +238,25 @@ h5.text {
 }
 
 #browser-form-section {
-  position: relative;
+  position: fixed;
+  bottom: 0;
 }
 
 #url-field {
   height: 2rem;
   width: 9rem;
-  border: 2px solid black;
-  border-radius: 1rem;
-  margin-top: 20rem;
+  border-radius: 8px;
+  /* margin-top: 20rem; */
 }
 
 #browser-btn {
-  padding: 6px 10px;
+  padding: 8px 20px;
   border-radius: 8px;
   margin: 10px;
-  /* background-color: ; */
+  font-size: 16px;
+  color: white;
 }
 
-#devtools-btn {
-  padding: 5px 15px;
-  border-radius: 8px;
-  margin: 10px;
-}
-/* Add media queries for small screens (when the height of the screen is less than 450px, add a smaller padding and font-size) */
 @media screen and (max-height: 450px) {
   .sidebar {padding-top: 15px;}
   .sidebar a {font-size: 18px;}
