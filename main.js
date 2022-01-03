@@ -7,7 +7,7 @@ const {
   dialog,
   ipcRenderer,
 } = require('electron');
-const path = require('path');
+//const path = require('path');
 const { promises: fs } = require('fs');
 const Store = require('electron-store');
 const exec = require('child_process');
@@ -224,7 +224,10 @@ ipcMain.handle('runTerminal', (event, termCommand, args = ['']) => {
 
   console.log('arguments in main.js', termCommand + ' ' + args);
   // await shellPath();
-  const ls = spawn('source $HOME/.zshrc;' + termCommand, args, {
+  console.log('getAppPath', app.getAppPath());
+  console.log('resourcesPath', process.resourcesPath);
+  const path = '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin';
+  const ls = spawn(`export PATH=${path};` + termCommand, args, {
     cwd: '/tmp',
     shell: true,
   });
@@ -238,6 +241,8 @@ ipcMain.handle('runTerminal', (event, termCommand, args = ['']) => {
   });
 
   ls.stderr.on('data', (data) => {
+    data = data.toString().trim();
+    event.sender.send('terminalOutput', data);
     console.error(`stderr: ${data}`);
   });
 
