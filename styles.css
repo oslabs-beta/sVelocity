@@ -1,7 +1,16 @@
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   body {
-    background: #333;
+    background: #3e4f88;
     color: white;
+  }
+
+  .true {
+    background-color: #3e4f88;
+  }
+
+  li {
+    border: 1px solid #b9dff0;
+    background-color: #354475;
   }
 
   .head {
@@ -9,22 +18,35 @@
   }
 
   .CodeMirror {
-    background: #333;
-    color: white;
+    background: #3e4f88;
+    color: #b9dff0;
   }
 
   .CodeMirror-gutter {
-    background: rgb(71, 71, 71);
+    background: #3e4f88;
   }
 
   .CodeMirror-linenumbers {
-    background: rgb(71, 71, 71);
+    background: #354475;
+  }
+
+  .sidebar {
+    background-color: #1b2e5c;
+  }
+
+  a:hover {
+    background-color: #111d3a;
+  }
+  
+  a:active {
+    box-shadow: 0 3.5px #111d3a;
+    transform: translateY(4px);
   }
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   body {
-    background: #ddd;
+    background: #feeedd;
     color: black;
   }
 
@@ -32,17 +54,39 @@
     color: black;
   }
 
+  .true {
+    background-color: #fcf3ea;
+  }
+
+  li {
+    border: 1px solid #b8b8ff;
+    background-color: #fed8be;
+  }
+
   .CodeMirror {
-    background: #ddd;
-    color: black;
+    background: #fcf3ea;
+    color: #9382fe;
   }
 
   .CodeMirror-gutter {
-    background: white;
+    background: #fed8be;
   }
 
   .CodeMirror-linenumbers {
-    background: white;
+    background: #fed8be;
+  }
+
+  .sidebar {
+    background-color: #7a72e9;
+  }
+
+  a:hover {
+    background-color: #4840ac
+  }
+  
+  a:active {
+    box-shadow: 0 3.5px #4840ac;
+    transform: translateY(4px);
   }
 }
 html {
@@ -55,17 +99,30 @@ body {
   padding: 0;
   font-family: 'Raleway', sans-serif;
   display: grid;
-  grid-template-areas: "sidenav form form" "sidenav codemirror ." "sidenav terminal .";
+  grid-template-areas: "sidenav tabs tabs" "sidenav codemirror ." "sidenav terminal .";
   grid-template-rows: 50px 1fr 200px;
   grid-template-columns: 150px 1fr 200px;
 }
 
 li {
-  display: block;
+  display: inline-block;
+  margin-right: 8px;
+  border-bottom: 0;
+  /* border-top-right-radius: 8%; */
+  /* border-top-left-radius: 8%; */
+  height: fit-content;
+}
+
+.tabs {
+  grid-area: tabs;
+  margin: 0;
+  display: flex;
+  align-items: flex-end;
 }
 
 h5.text {
   display: inline-block;
+  margin: 10px;
 }
 /* #editor {
   height: 100% !important;
@@ -74,16 +131,16 @@ h5.text {
   grid-area: codemirror;
   width: 60%;
   height: 100%;
-  overflow: auto !important;
+  overflow: hidden !important;
   margin-bottom: 0.5rem;
   margin-left: 0.8rem;
 }
 .xterm-viewport {
-  width: 60% !important;
+  width: 61% !important;
   /* height: 20vh; */
 }
 
-#browser-form-section {
+/* #browser-form-section {
   float: right;
   width: 30%;
   margin-left: 50%;
@@ -91,14 +148,14 @@ h5.text {
 
 #browser-form {
   margin-top: 0.5%;
-}
+} */
 
-.header-container {
+/* .header-container {
   align-items: center;
   justify-content: center;
   margin-top: 0.3%;
   grid-area: form;
-}
+} */
 
 .outer-terminal {
   grid-area: terminal;
@@ -134,7 +191,6 @@ h5.text {
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #111;
   overflow-x: hidden;
   padding-top: 16px;
   grid-area: sidenav;
@@ -160,8 +216,37 @@ h5.text {
   padding: 0px 10px;
 }
 
+#browser-form-section {
+  position: relative;
+}
+
+#url-field {
+  height: 2rem;
+  width: 9rem;
+  border: 2px solid black;
+  border-radius: 1rem;
+  margin-top: 20rem;
+}
+
+#browser-btn {
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin: 10px;
+  /* background-color: ; */
+}
+
+#devtools-btn {
+  padding: 5px 15px;
+  border-radius: 8px;
+  margin: 10px;
+}
 /* Add media queries for small screens (when the height of the screen is less than 450px, add a smaller padding and font-size) */
 @media screen and (max-height: 450px) {
   .sidebar {padding-top: 15px;}
   .sidebar a {font-size: 18px;}
+}
+
+a {
+  width: 60px;
+  border-radius: 12px;
 }

@@ -59,6 +59,15 @@ window.fileHandler.recieveMessage((content, allFiles) => {
         obj.active = true;
       }
     });
+    // txt.parentNode.setAttribute('class', 'active');
+    if (document.querySelector('.true') === null) {
+      txt.parentNode.setAttribute('class', true);
+    } else {
+      const activeToFalse = document.querySelector('.true');
+      activeToFalse.removeAttribute('class', 'true');
+      activeToFalse.setAttribute('class', false);
+      txt.parentNode.setAttribute('class', true);
+    }
   });
 
   btn.addEventListener('click', () => {
