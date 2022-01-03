@@ -55,10 +55,27 @@ window.fileHandler.recieveMessage((content, allFiles) => {
     allData.forEach((obj) => {
       if (obj !== selfies) {
         obj.active = false;
+        //txt.parentNode.setAttribute('class', obj.active);
       } else {
         obj.active = true;
       }
     });
+    // document.querySelector('.true').removeAttribute('class', 'true');
+    // const removeActive = document.getElementsByClassName('true');
+    // removeActive.removeAttribute('active');
+    // txt.parentNode.setAttribute('class', 'true');
+    if (document.querySelector('.true') === null) {
+      txt.parentNode.setAttribute('class', true);
+    } else {
+      const activeToFalse = document.querySelector('.true');
+      activeToFalse.removeAttribute('class', 'true');
+      activeToFalse.setAttribute('class', false);
+      txt.parentNode.setAttribute('class', true);
+    }
+    // document
+    //   .querySelector('.true')
+    //   .removeAttribute('class', 'true')
+    //   .setAttribute('class', true);
   });
 
   btn.addEventListener('click', () => {

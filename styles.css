@@ -45,13 +45,59 @@
     background: white;
   }
 }
-
+html {
+  margin: 0;
+}
 body {
   margin: 0px;
   font-family: 'Raleway', sans-serif;
-  overflow: hidden;
-  max-width: none;
-  overflow: hidden;
+}
+
+.body-wrapper {
+  display: grid;
+  grid-template-rows: 40px 60% 1fr;
+  grid-template-columns: 100px 1fr 50%;
+  grid-template-areas: 'buttons tabs tabs' 'buttons editor .' 'buttons xterm .';
+}
+
+/* .header-container {
+  background-color: red;
+  grid-area: header-container;
+} */
+
+#url-field {
+  max-width: 91px;
+}
+
+#devtools-btn {
+  max-width: 91px;
+}
+
+.buttons {
+  background-color: green;
+  grid-area: buttons;
+}
+
+.tabs {
+  background-color: plum;
+  grid-area: tabs;
+  margin: 0;
+}
+
+#editor {
+  background-color: aqua;
+  grid-area: editor;
+}
+
+.outer-terminal {
+  background-color: orange;
+  grid-area: xterm;
+}
+.CodeMirror {
+  height: 100%;
+}
+.xterm-viewport {
+  max-height: 200px;
 }
 /* body {
   display: grid;
@@ -62,9 +108,9 @@ body {
 } */
 
 li {
-  display: block;
+  display: inline-block;
 }
-
+/* 
 h5.text {
   display: inline-block;
 }
@@ -74,19 +120,18 @@ h5.text {
 .CodeMirror {
   width: 55%;
   height: 30rem;
-  /* height: 90% !important; */
-  /* resize: vertical; */
+  
   overflow: auto !important;
   margin-bottom: 0.5rem;
-  /* grid-area: 'codeEditor'; */
+
 }
 
 #browser-form-section {
   float: right;
-  /* margin: 0 1.5%; */
+  
   width: 30%;
   margin-left: 50%;
-  /* margin-top: .5%; */
+  
 }
 
 #browser-form {
@@ -98,8 +143,8 @@ h5.text {
   align-items: center;
   justify-content: center;
   margin-top: 0.3%;
-  /* grid-area: 'browserForm' !important; */
-}
+  
+} */
 
 /* .buttons {
   grid-area: 'button';

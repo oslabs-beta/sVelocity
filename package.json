@@ -10,7 +10,8 @@
     "dist": "electron-builder",
     "start": "electron .",
     "dev": "electron . webpack --watch --progress",
-    "build": "webpack"
+    "build": "webpack",
+    "el": "yarn build && yarn dev"
   },
   "devDependencies": {
     "electron": "^16.0.4",

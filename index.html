@@ -18,30 +18,31 @@
 
 
 <body>
-  <div class="header-container">
-    <section id="browser-form-section">
-      <form id="browser-form">
-        <label>Browser View URL:</label>
-        <input type="text" id="url-field" value="place url here...">
-        <input type="button" id="browser-btn" value="See Browser View"></input>
-        <input type="button" id="devtools-btn" value="Open DevTools"></input>
-      </form>
-    </section>
-  </div>
+<div class="body-wrapper">
   <section class="buttons">
     <button id="toggle-dark-mode">Toggle Dark Mode</button>
-
     <button id="open-file">Open File</button>
     <button id="new-file">New File</button>
     <button id="save-file">Save File</button>
+    <div class="header-container">
+      <section id="browser-form-section">
+        <form id="browser-form">
+          <label>Browser View URL:</label>
+          <input type="text" id="url-field" placeholder="place url here...">
+          <input type="button" id="url-field" value="See Browser View"></input>
+          <input type="button" id="devtools-btn" value="Open DevTools"></input>
+        </form>
+      </section>
+    </div>
   </section>
   <ul class="tabs"></ul>
   <textarea id="editor">
   </textarea>
-<div class= "outer-terminal">
+ <div class="outer-terminal">
   <div id='terminal-container'></div>
+ </div>
 </div>
-  <script src="./renderer.js"></script>
+<script src="./renderer.js"></script>
 </body>
 
 </html>

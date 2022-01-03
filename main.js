@@ -51,7 +51,7 @@ const createWindow = () => {
 
   const view = new BrowserView();
   win.setBrowserView(view);
-  view.setBounds({ x: 550, y: 68, width: 450, height: 480 });
+  view.setBounds({ x: 600, y: 40, width: 400, height: 800 });
   let url;
   if (!url) {
     view.webContents.loadURL('https://svelte.dev/docs');
@@ -70,7 +70,7 @@ const createWindow = () => {
     console.log(`failed to load ${url}`);
     view.webContents.loadURL('https://http.cat/404');
   });
-  view.setAutoResize({ horizontal: true });
+  view.setAutoResize({ horizontal: true, vertical: true });
 
   function devT() {
     view.webContents.openDevTools({ mode: 'right' });
