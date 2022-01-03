@@ -143,7 +143,7 @@ body {
   display: grid;
   grid-template-areas: "sidenav tabs tabs" "sidenav codemirror ." "sidenav terminal .";
   grid-template-rows: 50px 1fr 200px;
-  grid-template-columns: 150px 1fr 96px;
+  grid-template-columns: 150px 1fr 102px;
 }
 
 li {
@@ -174,7 +174,7 @@ h5.text {
   margin-left: 0.8rem;
 }
 .xterm-viewport {
-  width: 61% !important;
+  width: 100% !important;
 }
 
 .outer-terminal {
@@ -182,9 +182,23 @@ h5.text {
   margin-left: .8rem;
 }
 
+div.xterm-rows > div[style]{
+  overflow: visible !important;
+  overflow-wrap: normal !important;
+  width: 100% !important;
+}
 
 .xterm-screen {
   height: 200px !important;
+  max-width: 100%;
+}
+
+#terminal-container {
+  max-width: 100%;
+}
+
+.outer-terminal {
+  max-width: 62%;
 }
 
 .xterm-text-layer {
@@ -222,8 +236,8 @@ h5.text {
   font-size: 20px;
   color: #818181;
   display: block;
-  /* margin-left: auto;
-  margin-right:auto; */
+  margin-left: auto;
+  margin-right:auto;
 }
 
 /* Style links on mouse-over */

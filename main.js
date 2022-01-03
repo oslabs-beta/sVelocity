@@ -210,7 +210,8 @@ ipcMain.handle('runTerminal', (event, termCommand, args = ['']) => {
 
   console.log('arguments in main.js', termCommand + ' ' + args);
   // await shellPath();
-  const ls = spawn('source $HOME/.zshrc;' + termCommand, args, {
+  const shellPath = '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'; 
+  const ls = spawn(`export PATH=${shellPath};` + termCommand, args, {
     cwd: '/tmp',
     shell: true,
   });
@@ -224,6 +225,8 @@ ipcMain.handle('runTerminal', (event, termCommand, args = ['']) => {
   });
 
   ls.stderr.on('data', (data) => {
+    data = data.toString().trim();
+    event.sender.send('terminalOutput', data);
     console.error(`stderr: ${data}`);
   });
 
