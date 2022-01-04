@@ -187,12 +187,40 @@ ipcMain.handle('saveFile', (event, editorValue) => {
 });
 
 ipcMain.handle('createFile', (event, fileName) => {
-  fs.writeFile(`/Users/elenizoump/Desktop/${fileName}`, '', (err) => {
-    if (err) {
-      alert('An error ocurred creating the file ' + err.message);
-    }
-    alert('The file has been succesfully created');
-  });
+  try {
+    //get the location where the new file will be created
+    const newFilePath = `/Users/elenizoump/Desktop/${fileName}`;
+    //begin with the contents of a new editor
+    fs.writeFile(newFilePath, '', (err) => {
+      if (err) {
+        alert('An error ocurred creating the file ' + err.message);
+      }
+      alert('The file has been succesfully created');
+    });
+    //create a new item in the store
+    allFiles = store.get('allFiles');
+    allFiles.push({
+      filepath: newFilePath,
+      filename: fileName,
+      active: false,
+      editor: {
+        theme: 'pastel-on-dark',
+        mode: modes[
+          newFilePath.slice(
+            newFilePath.lastIndexOf('.') + 1,
+            newFilePath.length
+          )
+        ],
+        lineNumbers: true,
+        tabSize: 2,
+        value: '',
+      },
+    });
+    store.set('allFiles', allFiles);
+    event.sender.send('eventInMain', allFiles);
+  } catch (error) {
+    console.log('error', error);
+  }
 });
 
 ipcMain.handle('runTerminal', (event, termCommand, args = ['']) => {
