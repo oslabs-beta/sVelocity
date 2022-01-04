@@ -31,6 +31,8 @@ window.fileHandler.recieveMessage((content, allFiles) => {
   const selfObj = allData[allData.length - 1];
   //add item (now active) on the recently viewed queue
   lastViewed.add(selfObj.filename);
+  console.log(selfObj, 'selfObj');
+  console.log(allData.length, 'aaaaaallllData.legth');
   console.log(allData, 'aaaaaallllData');
   //create a tab dom element with text (filename) and closing button and append to dom
   const ul = document.getElementsByTagName('UL');
@@ -50,7 +52,7 @@ window.fileHandler.recieveMessage((content, allFiles) => {
   const tabs = document.getElementsByTagName('LI');
   //set active property of current obj to true
   selfObj.active = true;
-
+  console.log(allData, 'aaaaaallllData1');
   //if no other tabs are active then set tab class to active (true)
   if (document.querySelector('.true') === null) {
     txt.parentNode.setAttribute('class', true);
@@ -90,16 +92,26 @@ window.fileHandler.recieveMessage((content, allFiles) => {
       txt.parentNode.setAttribute('class', true);
     }
   });
+  console.log(allData, 'aaaaaallllData2');
 
   //closing tab functionality
   btn.addEventListener('click', () => {
+    console.log(allData, 'aaaaaallllData4');
     //if tab to be closed is last tab, reset editor to empty, turn active to false and remove tab
     if (tabs.length <= 1) {
       editor.setValue('');
       selfObj.active = false;
       tab.remove();
+      console.log(allData, 'aaaaaallllData5');
+
+      //remove obj from allData array
+      allData.splice(allData.indexOf(selfObj), 1);
       //if tab not last, set active property to false, remove from recently viewed queue, set as active tab the most recently viewed tab and set editor to corresponding editor content.
     } else {
+      const updatedData = allData;
+      console.log(updatedData, 'updatedData');
+      console.log(dataFromStore, 'storeeeeeeeeeeData');
+      console.log(allData, 'aaaaaallllData3');
       console.log(selfObj, 'self obj');
       //console.log(allData, 'allData');
       //if current obj property is active then deactivate it and delete filename from recently viewed queue
@@ -111,10 +123,13 @@ window.fileHandler.recieveMessage((content, allFiles) => {
         console.log(allData, 'allData1');
         console.log(lastViewed, 'lastviewed');
         console.log([...lastViewed][lastViewed.size - 1], 'lastviewed item');
-
+        console.log(dataFromStore, 'storeeeeeeeeeeData2');
+        console.log(allData.length, 'aaaaaallllData.legth');
+        console.log(dataFromStore.length, 'adataFromStore.length');
         //search the obj that is the last viewed item
         //bug: store here doesn't have both items (newFiles)
-        const activeFile = allData.find((obj) => {
+        const activeFile = dataFromStore.find((obj) => {
+          console.log(obj.filename, 'objectfrom find');
           obj.filename === [...lastViewed][lastViewed.size - 1];
         });
 
@@ -142,14 +157,14 @@ window.fileHandler.recieveMessage((content, allFiles) => {
       //delete tab
       tab.remove();
     }
-    //remove obj from allData array
-    allData.splice(allData.indexOf(selfObj), 1);
   });
 
   //append tab to ul dom parent
   ul[0].appendChild(tab);
   //set the editor value to the curret obj editor value
   editor.setValue(content);
+  //remove obj from allData array
+  allData.splice(allData.indexOf(selfObj), 1);
 });
 
 seeBrowser.addEventListener('click', () => {
