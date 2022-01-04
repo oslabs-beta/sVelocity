@@ -21,15 +21,15 @@ openFile.addEventListener('click', () => {
 
 window.fileHandler.recieveMessage((content, allFiles) => {
   console.log('openfile button clicked - lastviewed', lastViewed);
-  //open file
+  //open file functionality
+  //copy store Data to var. allData (electron quirk)
   const allData = allFiles;
+  //get the current item (obj)
   const selfObj = allData[allData.length - 1];
-
-  // if (lastViewed.length >= 2) {
-  //   lastViewed.shift();
-  // }
+  //add item (now active) on the recently viewed queue
   lastViewed.add(selfObj.filename);
 
+  //create a tab dom element with text (filename) and closing button and append to dom
   const ul = document.getElementsByTagName('UL');
   const tab = document.createElement('li');
   const txt = document.createElement('h5');
@@ -43,14 +43,16 @@ window.fileHandler.recieveMessage((content, allFiles) => {
   tab.appendChild(txt);
   tab.appendChild(btn);
 
+  //get list of tabs
   const tabs = document.getElementsByTagName('LI');
+  //set active property of current obj to true
   selfObj.active = true;
 
+  //if no other tabs are active then set tab class to active (true)
   if (document.querySelector('.true') === null) {
     txt.parentNode.setAttribute('class', true);
-    if (lastViewed.has(self)) {
-    }
   } else {
+    //else select the previously active tab, change it to false and set the new tab to active true
     const activeToFalse = document.querySelector('.true');
     activeToFalse.removeAttribute('class', 'true');
     activeToFalse.setAttribute('class', false);
@@ -58,11 +60,15 @@ window.fileHandler.recieveMessage((content, allFiles) => {
   }
 
   txt.addEventListener('click', () => {
-    //click file
+    //click file functionality
+    //remove clicked tab from recently viewed queue and re-insert it so that the order is correct
     lastViewed.delete(selfObj.filename);
     lastViewed.add(selfObj.filename);
     console.log('clicked tab text - lastviewed', lastViewed);
+    //show obj editor value
     editor.setValue(selfObj.editor.value);
+
+    //go through the data array, turn active: false  properties on all the other objs and active on the current obj
     allData.forEach((obj) => {
       if (obj !== selfObj) {
         obj.active = false;
@@ -70,10 +76,11 @@ window.fileHandler.recieveMessage((content, allFiles) => {
         obj.active = true;
       }
     });
-
+    //check if there is a tab with an active class (true) and if not then set current tab to true
     if (document.querySelector('.true') === null) {
       txt.parentNode.setAttribute('class', true);
     } else {
+      //get the active tab, deactivate it and set current tab class to active (true)
       const activeToFalse = document.querySelector('.true');
       activeToFalse.removeAttribute('class', 'true');
       activeToFalse.setAttribute('class', false);
@@ -88,38 +95,55 @@ window.fileHandler.recieveMessage((content, allFiles) => {
       editor.setValue('');
       selfObj.active = false;
       tab.remove();
-      //if tab not last, set active to false, remove from recently viewed queue, set as active tab the most recently viewed tab and set editor to corresponding editor content.
+      //if tab not last, set active property to false, remove from recently viewed queue, set as active tab the most recently viewed tab and set editor to corresponding editor content.
     } else {
+      console.log(selfObj, 'self obj');
+      //console.log(allData, 'allData');
+      //if current obj property is active then deactivate it and delete filename from recently viewed queue
       if (selfObj.active) {
         selfObj.active = false;
         lastViewed.delete(selfObj.filename);
-        console.log('close tab button clicked - lastviewed', lastViewed);
-        const activeFile = allData.find(
-          (obj) => obj.filename === [...lastViewed][lastViewed.size - 1]
-        );
+        //console.log('close tab button clicked - lastviewed', lastViewed);
+        //console.log(alldata, 'alldata');
+        console.log(allData, 'allData1');
+        console.log(lastViewed, 'lastviewed');
+        console.log([...lastViewed][lastViewed.size - 1], 'lastviewed item');
+        //search active file to the obj that is the last viewed item
+        const activeFile = allData.find((obj) => {
+          obj.filename === [...lastViewed][lastViewed.size - 1];
+        });
+
+        //console.log(activeFile, 'activefile');
         const tabs = document.getElementsByTagName('LI');
-        console.log(tabs);
+        //console.log(tabs);
+        //set the tab class corresponding to that obj to active true
         for (let i = 0; i < tabs.length; i++) {
-          // console.log(tabs[i].innerText);
           if (tabs[i].innerText.slice(0, -1) === activeFile.filename) {
             tabs[i].removeAttribute('class', false);
             tabs[i].setAttribute('class', true);
             break;
           }
         }
-        console.log(activeFile);
+        //console.log(activeFile);
+        //set the editor value to the last viewed obj
         editor.setValue(activeFile.editor.value);
+        //turn property active true on the obj
         activeFile.active = true;
       } else {
+        //if current obj active property false then just remove it's filename from last visited queue
         lastViewed.delete(selfObj.filename);
         console.log('close tab button clicked - lastviewed', lastViewed);
       }
-
+      //delete tab
       tab.remove();
     }
+    //remove obj from allData array
     allData.splice(allData.indexOf(selfObj), 1);
   });
+
+  //append tab to ul dom parent
   ul[0].appendChild(tab);
+  //set the editor value to the curret obj editor value
   editor.setValue(content);
 });
 
@@ -136,33 +160,112 @@ saveFileBtn.addEventListener('click', async () => {
 });
 
 newFileBtn.addEventListener('click', async () => {
-  //const editorValue = await editor.getValue();
+  //create new file functionality
+  //create input field on ul dom parent so that the new filename can be set
   const ul = document.getElementsByTagName('UL');
   const form = document.createElement('form');
   const input = document.createElement('input');
   form.setAttribute('id', 'form');
   input.setAttribute('type', 'text');
   input.setAttribute('id', 'tabInput');
-  //let inputForm = document.getElementById('form');
-
-  // form.addEventListener('keypress', function (e) {
-  //   if (e.key === 13) {
-  //     e.preventDefault();
-
-  //     // code for enter
-  //     console.log(hello);
-  //     ul[0].removeChild(inputForm);
-  //     //form.setAttribute('display', 'none');
-  //   }
-  // });
-  // form.appendChild(input);
-  //const textInputValue = document.getElementById('tabInput').value;
-
   ul[0].appendChild(input);
 
-  const fileName = 'hello.js';
+  //input event listener is triggered by enter key action and invokes main.js filehandler is invoked passing the filename which creates a file in the users filesystem
+  input.addEventListener('keypress', function (event) {
+    if (event.key === 'Enter') {
+      console.log(input.value);
+      console.log('lolsssssssssssssss');
+      event.preventDefault();
+      fileHandler.newFile('createFile', input.value);
 
-  fileHandler.newFile('createFile', fileName);
+      //remove input field from dom
+      ul[0].removeChild(input);
+
+      const tab = document.createElement('li');
+      const txt = document.createElement('h5');
+      const btn = document.createElement('button');
+
+      txt.innerText = `${input.value}`;
+      btn.innerText = 'x';
+      tab.setAttribute('class', true);
+      txt.setAttribute('class', 'text');
+      btn.setAttribute('class', 'close');
+      tab.appendChild(txt);
+      tab.appendChild(btn);
+
+      const tabs = document.getElementsByTagName('LI');
+      //selfObj.active = true;
+
+      if (document.querySelector('.true') === null) {
+        txt.parentNode.setAttribute('class', true);
+        console.log('close tab button clicked - lastviewed', lastViewed);
+      } else {
+        const activeToFalse = document.querySelector('.true');
+        activeToFalse.removeAttribute('class', 'true');
+        activeToFalse.setAttribute('class', false);
+        txt.parentNode.setAttribute('class', true);
+        console.log('close tab button clicked - lastviewed', lastViewed);
+      }
+      lastViewed.add(tab.innerText.slice(0, -1));
+
+      txt.addEventListener('click', () => {
+        //click file
+
+        lastViewed.delete(txt.parentNode.innerText.slice(0, -1));
+        lastViewed.add(txt.parentNode.innerText.slice(0, -1));
+        console.log('clicked tab text - lastviewed', lastViewed);
+        //editor.setValue(selfObj.editor.value);
+
+        if (document.querySelector('.true') === null) {
+          txt.parentNode.setAttribute('class', true);
+        } else {
+          const activeToFalse = document.querySelector('.true');
+          activeToFalse.removeAttribute('class', 'true');
+          activeToFalse.setAttribute('class', false);
+          txt.parentNode.setAttribute('class', true);
+        }
+      });
+
+      //closing tab functionality
+      btn.addEventListener('click', () => {
+        console.log('close tab button clicked - lastviewed', lastViewed);
+
+        //if tab to be closed is last tab, reset editor to empty, turn active to false and remove tab
+        if (tabs.length <= 1) {
+          editor.setValue('');
+          tab.remove();
+          //if tab not last, set active to false, remove from recently viewed queue, set as active tab the most recently viewed tab and set editor to corresponding editor content.
+        } else {
+          //if tab to be close is active
+          const parentActiveTab = btn.closest('.true');
+          if (Boolean(parentActiveTab)) {
+            lastViewed.delete(parentActiveTab.innerText.slice(0, -1));
+            console.log('close tab button clicked - lastviewed', lastViewed);
+
+            const tabs = document.getElementsByTagName('LI');
+            console.log(tabs);
+            for (let i = 0; i < tabs.length; i++) {
+              if (
+                tabs[i].innerText.slice(0, -1) ===
+                [...lastViewed][lastViewed.size - 1]
+              ) {
+                tabs[i].removeAttribute('class', false);
+                tabs[i].setAttribute('class', true);
+                break;
+              }
+            }
+            //else (non-active tab)
+          } else {
+            const parentTab = btn.parentNode;
+            lastViewed.delete(parentTab.innerText.slice(0, -1));
+            console.log('close tab button clicked - lastviewed', lastViewed);
+          }
+          tab.remove();
+        }
+      });
+      ul[0].appendChild(tab);
+    }
+  });
 });
 
 openDev.addEventListener('click', async () => {

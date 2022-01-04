@@ -79,7 +79,7 @@ const createWindow = () => {
   });
 
   function devT() {
-    view.webContents.openDevTools({ mode: 'right' });
+    view.webContents.openDevTools({ mode: 'bottom' });
     view.webContents.once('did-finish-load', function () {
       var windowBounds = view.getBounds();
       devtools.setPosition(windowBounds.x + windowBounds.width, windowBounds.y);
