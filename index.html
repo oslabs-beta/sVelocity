@@ -10,39 +10,43 @@
   </script>
   <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
   <script type="text/javascript" src="node_modules/xterm/lib/xterm.js"></script>
-  <!-- <script type="text/javascript" src="node_modules/xterm/lib/xterm-addon-xy.js"></script> -->
   <link rel="stylesheet" type="text/css" href="./styles.css" />
   <title>sVelocity</title>
   <script defer src="./build/webpack-bundle.js"></script>
 </head>
 
-
 <body>
-<div class="body-wrapper">
-  <section class="buttons">
-    <button id="toggle-dark-mode">Toggle Dark Mode</button>
-    <button id="open-file">Open File</button>
-    <button id="new-file">New File</button>
-    <button id="save-file">Save File</button>
-    <div class="header-container">
+  <div class="sidebar">
+    <div class="icons">
+    <a><i class="fa fa-fw fa-home"></i>
+      <img id="open-file" src="src/assets/folder.png" style="max-height: 50px;">
+    </a>
+    <a><i class="fa fa-fw fa-wrench"></i>
+      <img id="save-file" src="src/assets/savefile.png" style="max-height: 50px;">
+    </a>
+    <a><i class="fa fa-fw fa-user"></i>
+      <img id="new-file" src="src/assets/newfile.png" style="max-height: 50px;">
+    </a>
+    <a><i class="fa fa-fw fa-envelope"></i>
+      <img id="toggle-dark-mode" src="src/assets/day.png" style="max-height: 50px;">
+    </a>
+  </div>
+  <a><i class="fa fa-fw fa-envelope"></i>
+    <img id="devtools-btn" src="src/assets/repair.png" style="max-height: 50px;">
+  </a>
       <section id="browser-form-section">
-        <form id="browser-form">
-          <label>Browser View URL:</label>
-          <input type="text" id="url-field" placeholder="place url here...">
-          <input type="button" id="url-field" value="See Browser View"></input>
-          <input type="button" id="devtools-btn" value="Open DevTools"></input>
-        </form>
+          <input type="text" id="url-field" class="form-field" placeholder="Browser View URL..."><br>
+          <input type="button" id="browser-btn" value="Go"></input><br>
       </section>
-    </div>
-  </section>
+  </div>
+
   <ul class="tabs"></ul>
   <textarea id="editor">
   </textarea>
- <div class="outer-terminal">
-  <div id='terminal-container'></div>
- </div>
-</div>
-<script src="./renderer.js"></script>
+  <div class="outer-terminal">
+    <div id='terminal-container'></div>
+  </div>
+  <script src="./renderer.js"></script>
 </body>
 
 </html>

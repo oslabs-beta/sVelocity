@@ -1,6 +1,6 @@
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
-const terminal = new Terminal();
+const terminal = new Terminal({rendererType: 'dom',});
 const fitAddon = new FitAddon();
 terminal.loadAddon(fitAddon);
 terminal.open(document.getElementById('terminal-container'));

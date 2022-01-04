@@ -7,14 +7,15 @@ const {
   dialog,
   ipcRenderer,
 } = require('electron');
-//const path = require('path');
+const path = require('path');
 const { promises: fs } = require('fs');
 const Store = require('electron-store');
-const exec = require('child_process');
+// const exec = require('child_process');
 const spawn = require('cross-spawn');
 const store = new Store();
 // const { shellPath } = require('shell-path');
 store.set('allFiles', []);
+// const fixPath = require('fix-path');
 
 const filters = [
   { name: 'Text Files', extensions: ['txt', 'docx'] },
@@ -51,7 +52,7 @@ const createWindow = () => {
 
   const view = new BrowserView();
   win.setBrowserView(view);
-  view.setBounds({ x: 600, y: 40, width: 400, height: 800 });
+  view.setBounds({ x: 600, y: 50, width: 400, height: 800 });
   let url;
   if (!url) {
     view.webContents.loadURL('https://svelte.dev/docs');
@@ -70,7 +71,12 @@ const createWindow = () => {
     console.log(`failed to load ${url}`);
     view.webContents.loadURL('https://http.cat/404');
   });
-  view.setAutoResize({ horizontal: true, vertical: true });
+  view.setAutoResize({
+    horizontal: true,
+    vertical: true,
+    width: true,
+    height: true,
+  });
 
   function devT() {
     view.webContents.openDevTools({ mode: 'right' });
@@ -125,13 +131,13 @@ ipcMain.handle('getFileFromUser', async (event) => {
     const content = await fs.readFile(file, 'utf-8');
     allFiles = store.get('allFiles');
 
-    if (
-      allFiles.find((obj) => {
-        return obj.filepath === file;
-      })
-    ) {
-      return;
-    }
+    // if (
+    //   allFiles.find((obj) => {
+    //     return obj.filepath === file;
+    //   })
+    // ) {
+    //   return;
+    // }
 
     allFiles.push({
       filepath: file,
@@ -188,34 +194,6 @@ ipcMain.handle('createFile', (event, fileName) => {
     alert('The file has been succesfully created');
   });
 });
-//   if (file === undefined) {
-//     console.log("You didn't save the file");
-//     return;
-//   } else {
-//     const saveFile = await fs.writeFile(file.filePath, content, (err) => {
-//       if (err) {
-//         alert('An error ocurred creating the file ' + err.message);
-//       }
-//       alert('The file has been succesfully saved');
-//     });
-//   }
-// });
-//});
-//spawning child process to run commands and then send the stdout to the renderer
-
-// function patchSpawnForASAR() {
-//   const originalSpawn = child_process.spawn;
-//   const asarSpawn = (command, args, options) => {
-//     return originalSpawn(
-//       command,
-//       args
-//         ? args.map((arg) => arg.replace('app.asar', 'app.asar.unpacked'))
-//         : undefined,
-//       options
-//     );
-//   };
-//   child_process.spawn = asarSpawn;
-// }
 
 ipcMain.handle('runTerminal', (event, termCommand, args = ['']) => {
   if (termCommand == '') {
@@ -224,10 +202,8 @@ ipcMain.handle('runTerminal', (event, termCommand, args = ['']) => {
 
   console.log('arguments in main.js', termCommand + ' ' + args);
   // await shellPath();
-  console.log('getAppPath', app.getAppPath());
-  console.log('resourcesPath', process.resourcesPath);
-  const path = '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin';
-  const ls = spawn(`export PATH=${path};` + termCommand, args, {
+  const shellPath = '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin';
+  const ls = spawn(`export PATH=${shellPath};` + termCommand, args, {
     cwd: '/tmp',
     shell: true,
   });

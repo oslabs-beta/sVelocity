@@ -1,7 +1,16 @@
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   body {
-    background: #333;
+    background: #334272;
     color: white;
+  }
+
+  .true {
+    background-color: #3e4f88;
+  }
+
+  li {
+    border: 1px solid #b9dff0;
+    background-color: #354475;
   }
 
   .head {
@@ -9,22 +18,58 @@
   }
 
   .CodeMirror {
-    background: #333;
-    color: white;
+    background: #3e4f88;
+    color: #b9dff0;
   }
 
   .CodeMirror-gutter {
-    background: rgb(71, 71, 71);
+    background: #3e4f88;
   }
 
   .CodeMirror-linenumbers {
-    background: rgb(71, 71, 71);
+    background: #354475;
+  }
+
+  .xterm-viewport {
+    background-color: #1b2e5c !important;
+  }
+
+  .sidebar {
+    background-color: #1b2e5c;
+  }
+
+  a:hover {
+    background-color: #111d3a;
+  }
+
+  a:active {
+    box-shadow: 0 3.5px #111d3a;
+    transform: translateY(4px);
+  }
+
+  #url-field {
+    border: 1px solid #111d3a;
+  }
+
+  #browser-btn {
+    background-color: #111d3a;
+    border: 1px solid #b9dff0;
+  }
+
+  #browser-btn:hover {
+    border-color: #3e3979;
+    box-shadow: 10px 5px 5px #111d3a;
+  }
+
+  #browser-btn:active {
+    box-shadow: 0 3.5px #354475;
+    transform: translateY(4px);
   }
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   body {
-    background: #ddd;
+    background: #feeedd;
     color: black;
   }
 
@@ -32,155 +77,206 @@
     color: black;
   }
 
+  .true {
+    background-color: #fcf3ea;
+  }
+
+  li {
+    border: 1px solid #b8b8ff;
+    background-color: #fed8be;
+  }
+
   .CodeMirror {
-    background: #ddd;
-    color: black;
+    background: #fcf3ea;
+    color: #9382fe;
   }
 
   .CodeMirror-gutter {
-    background: white;
+    background: #fed8be;
   }
 
   .CodeMirror-linenumbers {
-    background: white;
+    background: #fed8be;
+  }
+
+  #url-field {
+    border: 1px solid #4840ac;
+  }
+
+  .sidebar {
+    background-color: #7a72e9;
+  }
+
+  a:hover {
+    background-color: #4840ac;
+  }
+
+  a:active {
+    box-shadow: 0 3.5px #4840ac;
+    transform: translateY(4px);
+  }
+
+  #browser-btn {
+    background-color: #4840ac;
+    border: 1px solid #7a72e9;
+  }
+
+  #browser-btn:hover {
+    border-color: #3e3979;
+    box-shadow: 10px 5px 5px #3e3979;
+  }
+
+  #browser-btn:active {
+    box-shadow: 0 3.5px #4840ac;
+    transform: translateY(4px);
   }
 }
 html {
-  margin: 0;
+  max-height: 100vh;
 }
+
 body {
   margin: 0px;
+  height: 100vh;
+  padding: 0;
   font-family: 'Raleway', sans-serif;
-}
-
-.body-wrapper {
   display: grid;
-  grid-template-rows: 40px 60% 1fr;
-  grid-template-columns: 100px 1fr 50%;
-  grid-template-areas: 'buttons tabs tabs' 'buttons editor .' 'buttons xterm .';
+  grid-template-areas: 'sidenav tabs tabs' 'sidenav codemirror .' 'sidenav terminal .';
+  grid-template-rows: 50px 1fr 200px;
+  grid-template-columns: 150px 1fr 102px;
 }
-
-/* .header-container {
-  background-color: red;
-  grid-area: header-container;
-} */
-
-#url-field {
-  max-width: 91px;
-}
-
-#devtools-btn {
-  max-width: 91px;
-}
-
-.buttons {
-  background-color: green;
-  grid-area: buttons;
-}
-
-.tabs {
-  background-color: plum;
-  grid-area: tabs;
-  margin: 0;
-}
-
-#editor {
-  background-color: aqua;
-  grid-area: editor;
-}
-
-.outer-terminal {
-  background-color: orange;
-  grid-area: xterm;
-}
-.CodeMirror {
-  height: 100%;
-}
-.xterm-viewport {
-  max-height: 200px;
-}
-/* body {
-  display: grid;
-  grid-template-rows: 100px 60% 1fr;
-  grid-template-columns: 50px 1fr 1fr 50px;
-
-  grid-template-areas: '. button browserForm .' '. codeEditor . . ' '. terminal terminal .';
-} */
 
 li {
   display: inline-block;
+  margin-right: 8px;
+  border-bottom: 0;
+  height: fit-content;
 }
-/* 
+
+.tabs {
+  grid-area: tabs;
+  margin: 0;
+  display: flex;
+  align-items: flex-end;
+}
+
 h5.text {
   display: inline-block;
+  margin: 10px;
 }
-#editor {
-  height: 100% !important;
-}
+
 .CodeMirror {
-  width: 55%;
-  height: 30rem;
-  
-  overflow: auto !important;
+  grid-area: codemirror;
+  width: 60%;
+  height: 100%;
+  overflow: hidden !important;
   margin-bottom: 0.5rem;
-
+  margin-left: 0.8rem;
 }
-
-#browser-form-section {
-  float: right;
-  
-  width: 30%;
-  margin-left: 50%;
-  
-}
-
-#browser-form {
-  margin-top: 0.5%;
-}
-
-.header-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 0.3%;
-  
-} */
-
-/* .buttons {
-  grid-area: 'button';
+.xterm-viewport {
+  width: 100% !important;
 }
 
 .outer-terminal {
-  grid-area: 'terminal';
-} */
+  grid-area: terminal;
+  margin-left: 0.8rem;
+  max-width: 62%;
+}
 
-/* #terminal-container {
-  position: absolute;
-  bottom: 0;
-  height: 20%;
-  width: auto;
-} */
-/* .outer-terminal {
-  display: inline-block;
-  position:absolute;
-  width: 100%;
-  height: 28%;
-  max-width: none;
-  left: -5px;
-  bottom: -5px;
-  cursor: nwse-resize; 
-} */
-/* 
+div.xterm-rows > div[style] {
+  overflow: visible !important;
+  overflow-wrap: normal !important;
+  width: 100% !important;
+}
+
+.xterm-screen {
+  height: 200px !important;
+  max-width: 100%;
+}
+
 #terminal-container {
+  max-width: 100%;
+}
 
-  display: inline-block;
-  height: 100% !important;
-  width: 130% !important;
-  position:relative;
-  margin-left: 3%;
-  margin-right: 3%;
+.xterm-text-layer {
+  height: 200px !important;
+}
 
-  box-sizing: border-box;
-} */
+.xterm-selection-layer {
+  height: 200px !important;
+}
 
-/* try styling .xterm or .terminal*/
+.xterm-link-layer {
+  height: 200px !important;
+}
+
+.xterm-cursor-layer {
+  height: 200px !important;
+}
+
+.sidebar {
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  padding-top: 16px;
+  grid-area: sidenav;
+}
+
+/* Style sidebar links */
+.sidebar a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Style links on mouse-over */
+.sidebar a:hover {
+  color: #f1f1f1;
+}
+
+/* Style the main content */
+.main {
+  margin-left: 160px; /* Same as the width of the sidenav */
+  padding: 0px 10px;
+}
+
+#browser-form-section {
+  position: fixed;
+  bottom: 0;
+}
+
+#url-field {
+  height: 2rem;
+  width: 9rem;
+  border-radius: 8px;
+}
+
+#browser-btn {
+  padding: 8px 20px;
+  border-radius: 8px;
+  margin: 10px;
+  font-size: 16px;
+  color: white;
+}
+
+@media screen and (max-height: 450px) {
+  .sidebar {
+    padding-top: 15px;
+  }
+  .sidebar a {
+    font-size: 18px;
+  }
+}
+
+a {
+  width: 60px;
+  border-radius: 12px;
+}
