@@ -14,7 +14,7 @@ sVelocity is a cross-platform code editor application optimized for building and
 - [Built With](#built-with)
 - [Features](#features)
 - [Upcoming Features](#upcoming-features)
-- [Contibutions Welcome](#contibutions-welcome)
+- [Contributions Welcome](#contributions-welcome)
 - [License](#license)
 - [Contributors](#contributors)
 
@@ -101,7 +101,7 @@ Toggle dark-mode
 - Linter and spell-check features
 - Allow components to be draggable with mouse.
 
-## Contibutions Welcome
+## Contributions Welcome
 
 We are always happy to receive feedback and ideas on how to improve. Please feel free to make a PR with your suggestions and one of the developer team members will get in touch as soon as possible.
 
