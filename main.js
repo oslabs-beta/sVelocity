@@ -48,7 +48,7 @@ const createWindow = () => {
   // win.loadFile('index.html');
   win.loadFile(path.resolve(__dirname, 'index.html'));
 
-  win.webContents.openDevTools({ mode: 'detach' });
+  // win.webContents.openDevTools({ mode: 'detach' });
 
   const view = new BrowserView();
   win.setBrowserView(view);
