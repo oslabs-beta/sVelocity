@@ -5,17 +5,13 @@ const {
   ipcMain,
   nativeTheme,
   dialog,
-  ipcRenderer,
 } = require('electron');
 const path = require('path');
 const { promises: fs } = require('fs');
 const Store = require('electron-store');
-// const exec = require('child_process');
 const spawn = require('cross-spawn');
 const store = new Store();
-// const { shellPath } = require('shell-path');
 store.set('allFiles', []);
-// const fixPath = require('fix-path');
 
 const filters = [
   { name: 'Text Files', extensions: ['txt', 'docx'] },
@@ -45,7 +41,6 @@ const createWindow = () => {
     },
   });
 
-  // win.loadFile('index.html');
   win.loadFile(path.resolve(__dirname, 'index.html'));
 
   // win.webContents.openDevTools({ mode: 'detach' });
@@ -146,38 +141,59 @@ ipcMain.handle('getFileFromUser', async (event) => {
   }
 });
 
-ipcMain.handle('saveFile', (event, editorValue) => {
-  const content = editorValue.toString();
-
-  dialog
-    .showSaveDialog({
-      buttonLabel: 'Save Button(:',
-      filters: filters,
-      properties: [],
-    })
-    .then(async (file) => {
-      try {
-        if (file === undefined) {
-          console.log("You didn't save the file");
-          return;
-        } else {
-          await fs.writeFile(file.filePath, content, (err) => {
-            if (err) {
-              alert('An error ocurred creating the file ' + err.message);
-            }
-            alert('The file has been succesfully saved');
-          });
-        }
-      } catch (error) {
-        console.log('error', error);
-      }
+ipcMain.handle('saveFile', async (event, editorValue, fileName) => {
+  try {
+    const content = await editorValue.toString();
+    //find file in store and file location in fs and update
+    const allFiles = await store.get('allFiles');
+    const file = allFiles.find((obj) => {
+      return obj.filename === fileName;
     });
+    await fs.writeFile(file.filepath, content, (err) => {
+      if (err) {
+        alert('An error ocurred creating the file ' + err.message);
+      }
+      alert('The file has been succesfully saved');
+    });
+  } catch (error) {
+    console.log('error', error);
+  }
 });
 
 ipcMain.handle('createFile', (event, fileName) => {
   try {
     //get the location where the new file will be created
     const newFilePath = `/Users/elenizoump/Desktop/${fileName}`;
+    // const homePath = (function () {
+    //   function homedir() {
+    //     var env = process.env;
+    //     var home = env.HOME;
+    //     var user = env.LOGNAME || env.USER || env.LNAME || env.USERNAME;
+
+    //     if (process.platform === 'win32') {
+    //       return (
+    //         env.USERPROFILE || env.HOMEDRIVE + env.HOMEPATH || home || null
+    //       );
+    //     }
+
+    //     if (process.platform === 'darwin') {
+    //       return home || (user ? '/Users/' + user : null);
+    //     }
+
+    //     if (process.platform === 'linux') {
+    //       return (
+    //         home ||
+    //         (process.getuid() === 0 ? '/root' : user ? '/home/' + user : null)
+    //       );
+    //     }
+
+    //     return home || null;
+    //   }
+    //   return typeof os.homedir === 'function' ? os.homedir : homedir;
+    // })();
+
+    //const newFilePath = homePath + `/Desktop/${fileName}`;
+
     //begin with the contents of a new editor
     fs.writeFile(newFilePath, '', (err) => {
       if (err) {
@@ -217,7 +233,6 @@ ipcMain.handle('runTerminal', (event, termCommand, args = ['']) => {
   }
 
   console.log('arguments in main.js', termCommand + ' ' + args);
-  // await shellPath();
   const shellPath = '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin';
   const ls = spawn(`export PATH=${shellPath};` + termCommand, args, {
     cwd: '/tmp',
