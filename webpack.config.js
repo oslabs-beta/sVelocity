@@ -25,7 +25,7 @@ const config = {
     rules: [
       {
         test: /\.svelte$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/, path.resolve(__dirname, './githubAssets/')],
         loader: 'svelte-loader',
         options: {
           preprocess: require('svelte-preprocess')({ postcss: true }),
