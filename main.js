@@ -71,10 +71,16 @@ const createWindow = () => {
     console.log(`failed to load ${url}`);
     view.webContents.loadURL('https://http.cat/404');
   });
+  // view.setAutoResize({
+  //   horizontal: true,
+  //   vertical: true,
+  //   width: true,
+  //   height: true,
+  // });
   view.setAutoResize({ horizontal: true, vertical: true, height: true });
 
   function devT() {
-    view.webContents.openDevTools({ mode: 'right' });
+    view.webContents.openDevTools({ mode: 'bottom' });
     view.webContents.once('did-finish-load', function () {
       var windowBounds = view.getBounds();
       devtools.setPosition(windowBounds.x + windowBounds.width, windowBounds.y);
@@ -126,13 +132,13 @@ ipcMain.handle('getFileFromUser', async (event) => {
     const content = await fs.readFile(file, 'utf-8');
     allFiles = store.get('allFiles');
 
-    if (
-      allFiles.find((obj) => {
-        return obj.filepath === file;
-      })
-    ) {
-      return;
-    }
+    // if (
+    //   allFiles.find((obj) => {
+    //     return obj.filepath === file;
+    //   })
+    // ) {
+    //   return;
+    // }
 
     allFiles.push({
       filepath: file,
@@ -182,26 +188,41 @@ ipcMain.handle('saveFile', (event, editorValue) => {
 });
 
 ipcMain.handle('createFile', (event, fileName) => {
-  fs.writeFile(`/Users/elenizoump/Desktop/${fileName}`, '', (err) => {
-    if (err) {
-      alert('An error ocurred creating the file ' + err.message);
-    }
-    alert('The file has been succesfully created');
-  });
+  try {
+    //get the location where the new file will be created
+    const newFilePath = `/Users/elenizoump/Desktop/${fileName}`;
+    //begin with the contents of a new editor
+    fs.writeFile(newFilePath, '', (err) => {
+      if (err) {
+        alert('An error ocurred creating the file ' + err.message);
+      }
+      alert('The file has been succesfully created');
+    });
+    //create a new item in the store
+    allFiles = store.get('allFiles');
+    allFiles.push({
+      filepath: newFilePath,
+      filename: fileName,
+      active: false,
+      editor: {
+        theme: 'pastel-on-dark',
+        mode: modes[
+          newFilePath.slice(
+            newFilePath.lastIndexOf('.') + 1,
+            newFilePath.length
+          )
+        ],
+        lineNumbers: true,
+        tabSize: 2,
+        value: '',
+      },
+    });
+    store.set('allFiles', allFiles);
+    event.sender.send('eventInMain', allFiles);
+  } catch (error) {
+    console.log('error', error);
+  }
 });
-//   if (file === undefined) {
-//     console.log("You didn't save the file");
-//     return;
-//   } else {
-//     const saveFile = await fs.writeFile(file.filePath, content, (err) => {
-//       if (err) {
-//         alert('An error ocurred creating the file ' + err.message);
-//       }
-//       alert('The file has been succesfully saved');
-//     });
-//   }
-// });
-//});
 
 ipcMain.handle('runTerminal', (event, termCommand, args = ['']) => {
   if (termCommand == '') {
@@ -210,7 +231,7 @@ ipcMain.handle('runTerminal', (event, termCommand, args = ['']) => {
 
   console.log('arguments in main.js', termCommand + ' ' + args);
   // await shellPath();
-  const shellPath = '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'; 
+  const shellPath = '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin';
   const ls = spawn(`export PATH=${shellPath};` + termCommand, args, {
     cwd: '/tmp',
     shell: true,
