@@ -1,52 +1,87 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
-  </link>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js">
-  </script>
-  <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
-  <script type="text/javascript" src="node_modules/xterm/lib/xterm.js"></script>
-  <link rel="stylesheet" type="text/css" href="./styles.css" />
-  <title>sVelocity</title>
-  <script defer src="./build/webpack-bundle.js"></script>
-</head>
-
-<body>
-  <div class="sidebar">
-    <div class="icons">
-    <a><i class="fa fa-fw fa-home"></i>
-      <img id="open-file" src="./assets/folder.png" style="max-height: 50px;">
-    </a>
-    <a><i class="fa fa-fw fa-wrench"></i>
-      <img id="save-file" src="./assets/savefile.png" style="max-height: 50px;">
-    </a>
-    <a><i class="fa fa-fw fa-user"></i>
-      <img id="new-file" src="./assets/newfile.png" style="max-height: 50px;">
-    </a>
-    <a><i class="fa fa-fw fa-envelope"></i>
-      <img id="toggle-dark-mode" src="./assets/day.png" style="max-height: 50px;">
-    </a>
-  </div>
-  <a><i class="fa fa-fw fa-envelope"></i>
-    <img id="devtools-btn" src="./assets/repair.png" style="max-height: 50px;">
-  </a>
-      <section id="browser-form-section">
-          <input type="text" id="url-field" class="form-field" placeholder="Browser View URL..."><br>
-          <input type="button" id="browser-btn" value="Go"></input><br>
-      </section>
-  </div>
-
-  <ul class="tabs"></ul>
-  <textarea id="editor">
-  </textarea>
-  <div class="outer-terminal">
-    <div id='terminal-container'></div>
-  </div>
-  <script src="./renderer.js"></script>
-</body>
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css"
+    />
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"
+    ></script>
+    <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
+    <script
+      type="text/javascript"
+      src="node_modules/xterm/lib/xterm.js"
+    ></script>
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+    <title>sVelocity</title>
+    <script defer src="./build/webpack-bundle.js"></script>
+  </head>
+  <body>
+    <div id="browser-form">
+      <input
+        type="text"
+        id="url-field"
+        class="form-field"
+        placeholder="Browser View URL..."
+      />
+      <input type="button" id="browser-btn" value="Go" />
+    </div>
+    <div class="sidebar">
+      <div class="icons">
+        <a
+          ><i class="fa fa-fw fa-home"></i>
+          <img
+            id="open-file"
+            src="./assets/folder.png"
+            style="max-height: 50px"
+          />
+        </a>
+        <a
+          ><i class="fa fa-fw fa-wrench"></i>
+          <img
+            id="save-file"
+            src="./assets/savefile.png"
+            style="max-height: 50px"
+          />
+        </a>
+        <a
+          ><i class="fa fa-fw fa-user"></i>
+          <img
+            id="new-file"
+            src="./assets/newfile.png"
+            style="max-height: 50px"
+          />
+        </a>
+        <a
+          ><i class="fa fa-fw fa-envelope"></i>
+          <img
+            id="toggle-dark-mode"
+            src="./assets/day.png"
+            style="max-height: 50px"
+          />
+        </a>
+      </div>
+      <a
+        ><i class="fa fa-fw fa-envelope"></i>
+        <img
+          id="devtools-btn"
+          src="./assets/repair.png"
+          style="max-height: 50px"
+        />
+      </a>
+    </div>
+    <ul class="tabs"></ul>
+    <textarea id="editor"> </textarea>
+    <div class="outer-terminal">
+      <div id="terminal-container"></div>
+    </div>
+    <script src="./renderer.js"></script>
+  </body>
 </html>

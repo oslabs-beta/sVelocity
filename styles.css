@@ -141,9 +141,12 @@ body {
   padding: 0;
   font-family: 'Raleway', sans-serif;
   display: grid;
-  grid-template-areas: 'sidenav tabs tabs' 'sidenav codemirror .' 'sidenav terminal .';
-  grid-template-rows: 50px 1fr 200px;
-  grid-template-columns: 150px 1fr 102px;
+  grid-template-areas:
+    'sidenav tabs search search'
+    'sidenav codemirror codemirror .'
+    'sidenav terminal terminal .';
+  grid-template-rows: 0.15fr 2.5fr auto auto;
+  grid-template-columns: 0.15fr 1fr auto auto;
 }
 
 li {
@@ -190,11 +193,8 @@ h5.text {
 
 .CodeMirror {
   grid-area: codemirror;
-  width: 60%;
-  height: 100%;
-  overflow: hidden !important;
-  margin-bottom: 0.5rem;
-  margin-left: 0.8rem;
+  height: auto;
+  width: 63%;
 }
 .xterm-viewport {
   width: 100% !important;
@@ -202,8 +202,8 @@ h5.text {
 
 .outer-terminal {
   grid-area: terminal;
-  margin-left: 0.8rem;
-  max-width: 62%;
+  /* margin-left: .8rem; */
+  max-width: 67%;
 }
 
 div.xterm-rows > div[style] {
@@ -214,7 +214,7 @@ div.xterm-rows > div[style] {
 
 .xterm-screen {
   height: 200px !important;
-  max-width: 100%;
+  /* bottom: 0; */
 }
 
 #terminal-container {
@@ -239,16 +239,17 @@ div.xterm-rows > div[style] {
 
 .sidebar {
   height: 100%;
-  width: 160px;
-  position: fixed;
+  width: auto;
   z-index: 1;
   top: 0;
   left: 0;
   overflow-x: hidden;
-  padding-top: 16px;
   grid-area: sidenav;
 }
 
+#open-file {
+  margin-top: 0.8rem;
+}
 /* Style sidebar links */
 .sidebar a {
   padding: 6px 8px 6px 16px;
@@ -271,9 +272,9 @@ div.xterm-rows > div[style] {
   padding: 0px 10px;
 }
 
-#browser-form-section {
-  position: fixed;
-  bottom: 0;
+#browser-form {
+  grid-area: search;
+  justify-items: end;
 }
 
 #url-field {
@@ -283,6 +284,7 @@ div.xterm-rows > div[style] {
 }
 
 #browser-btn {
+  grid-area: search;
   padding: 8px 20px;
   border-radius: 8px;
   margin: 10px;

@@ -71,12 +71,13 @@ const createWindow = () => {
     console.log(`failed to load ${url}`);
     view.webContents.loadURL('https://http.cat/404');
   });
-  view.setAutoResize({
-    horizontal: true,
-    vertical: true,
-    width: true,
-    height: true,
-  });
+  // view.setAutoResize({
+  //   horizontal: true,
+  //   vertical: true,
+  //   width: true,
+  //   height: true,
+  // });
+  view.setAutoResize({ horizontal: true, vertical: true, height: true });
 
   function devT() {
     view.webContents.openDevTools({ mode: 'bottom' });
