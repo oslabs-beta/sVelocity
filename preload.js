@@ -34,8 +34,8 @@ contextBridge.exposeInMainWorld(
           await callback(content, allFiles);
         }
       ),
-    saveFile: (channel, editorValue) =>
-      ipcRenderer.invoke('saveFile', editorValue),
+    saveFile: (channel, editorValue, fileName) =>
+      ipcRenderer.invoke('saveFile', editorValue, fileName),
     newFile: (channel, fileName) => ipcRenderer.invoke('createFile', fileName),
     receiveNewFileData: (callback) =>
       ipcRenderer.on('eventInMain', async function (event, allFiles) {
