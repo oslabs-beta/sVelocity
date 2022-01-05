@@ -3,6 +3,9 @@
     background: #334272;
     color: white;
   }
+  button.close {
+    color: white;
+  }
 
   .true {
     background-color: #3e4f88;
@@ -80,10 +83,14 @@
   .true {
     background-color: #fcf3ea;
   }
+  button.close {
+    color: #1b2e5c;
+  }
 
   li {
     border: 1px solid #b8b8ff;
     background-color: #fed8be;
+    color: #4840ac;
   }
 
   .CodeMirror {
@@ -156,13 +163,13 @@ li {
   height: fit-content;
   border-radius: 8px 8px 0 0;
 }
+
 button.close {
-  background-color: white;
-  border: 1px solid #1b2e5c;
+  background-color: transparent;
+  border: none;
   margin-right: 5px;
   border-radius: 4px;
   font-size: 12px;
-  color: #1b2e5c;
   padding: 2px 5px;
 }
 
@@ -245,6 +252,11 @@ div.xterm-rows > div[style] {
   left: 0;
   overflow-x: hidden;
   grid-area: sidenav;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  align-content: space-between;
 }
 
 #open-file {
@@ -305,3 +317,10 @@ a {
   width: 60px;
   border-radius: 12px;
 }
+/* 
+img#logo {
+  margin-top: auto;
+  max-width: 69%;
+  margin-right: auto;
+  margin-left: 11px;
+} */

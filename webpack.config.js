@@ -8,9 +8,9 @@ const config = {
   entry: './src/index.js',
   output: {
     globalObject: 'self',
-    path: path.resolve(__dirname, 'build'),
+    path: path.resolve(__dirname, 'dist'),
     filename: 'webpack-bundle.js',
-    publicPath: './build/',
+    publicPath: './dist/',
   },
   // Compile for Electron for main process.
   target: 'electron-main',

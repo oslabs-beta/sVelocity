@@ -17,6 +17,21 @@ document.getElementById('toggle-dark-mode').addEventListener('click', () => {
   window.darkMode.toggle();
 });
 
+document.onkeydown = function (evt) {
+  evt = evt || window.event;
+  var isEscape = false;
+  const input = document.getElementById('tabInput');
+  const ul = document.getElementsByTagName('UL');
+  if ('key' in evt) {
+    isEscape = evt.key === 'Escape' || evt.key === 'Esc';
+  } else {
+    isEscape = evt.key === 27;
+  }
+  if (isEscape && input) {
+    ul[0].removeChild(input);
+  }
+};
+
 openFile.addEventListener('click', () => {
   window.fileHandler.getFileFromUser();
 });
@@ -207,6 +222,25 @@ newFileBtn.addEventListener('click', async () => {
       //remove input field from dom
       ul[0].removeChild(input);
     }
+    // if (event.key === 'Escape' ) {
+    //   console.log(escaped);
+    //   event.preventDefault();
+    //   //remove input field from dom
+    //   ul[0].removeChild(input);
+    // }
+    // document.onkeydown = function (evt) {
+    //   evt = evt || window.event;
+    //   var isEscape = false;
+    //   if ('key' in evt) {
+    //     isEscape = evt.key === 'Escape' || evt.key === 'Esc';
+    //   } else {
+    //     isEscape = evt.key === 27;
+    //   }
+    //   if (isEscape) {
+    //     alert('Escape');
+    //     ul[0].removeChild(input);
+    //   }
+    // };
   });
 });
 
