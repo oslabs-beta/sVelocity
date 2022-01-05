@@ -25,6 +25,7 @@
     "electron-reload": "^2.0.0-alpha.1",
     "electron-store": "^8.0.1",
     "mini-css-extract-plugin": "^2.4.5",
+    "os": "^0.1.2",
     "style-loader": "^3.3.1",
     "svelte": "^3.44.2",
     "svelte-loader": "^3.1.2",

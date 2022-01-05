@@ -10,6 +10,7 @@ const path = require('path');
 const { promises: fs } = require('fs');
 const Store = require('electron-store');
 const spawn = require('cross-spawn');
+const os = require('os');
 const store = new Store();
 store.set('allFiles', []);
 
@@ -163,36 +164,36 @@ ipcMain.handle('saveFile', async (event, editorValue, fileName) => {
 ipcMain.handle('createFile', (event, fileName) => {
   try {
     //get the location where the new file will be created
-    const newFilePath = `/Users/elenizoump/Desktop/${fileName}`;
-    // const homePath = (function () {
-    //   function homedir() {
-    //     var env = process.env;
-    //     var home = env.HOME;
-    //     var user = env.LOGNAME || env.USER || env.LNAME || env.USERNAME;
+    // const newFilePath = `/Users/elenizoump/Desktop/${fileName}`;
+    const homePath = (function () {
+      function homedir() {
+        var env = process.env;
+        var home = env.HOME;
+        var user = env.LOGNAME || env.USER || env.LNAME || env.USERNAME;
 
-    //     if (process.platform === 'win32') {
-    //       return (
-    //         env.USERPROFILE || env.HOMEDRIVE + env.HOMEPATH || home || null
-    //       );
-    //     }
+        if (process.platform === 'win32') {
+          return (
+            env.USERPROFILE || env.HOMEDRIVE + env.HOMEPATH || home || null
+          );
+        }
 
-    //     if (process.platform === 'darwin') {
-    //       return home || (user ? '/Users/' + user : null);
-    //     }
+        if (process.platform === 'darwin') {
+          return home || (user ? '/Users/' + user : null);
+        }
 
-    //     if (process.platform === 'linux') {
-    //       return (
-    //         home ||
-    //         (process.getuid() === 0 ? '/root' : user ? '/home/' + user : null)
-    //       );
-    //     }
+        if (process.platform === 'linux') {
+          return (
+            home ||
+            (process.getuid() === 0 ? '/root' : user ? '/home/' + user : null)
+          );
+        }
 
-    //     return home || null;
-    //   }
-    //   return typeof os.homedir === 'function' ? os.homedir : homedir;
-    // })();
+        return home || null;
+      }
+      return typeof os.homedir === 'function' ? os.homedir : homedir;
+    })();
 
-    //const newFilePath = homePath + `/Desktop/${fileName}`;
+    const newFilePath = homePath + `/Desktop/${fileName}`;
 
     //begin with the contents of a new editor
     fs.writeFile(newFilePath, '', (err) => {
