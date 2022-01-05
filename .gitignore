@@ -1,6 +1,5 @@
 node_modules
 **/yarn.lock
 **/dist
-**/build
 .prettierrc.json
 .DS_Store
