@@ -1,67 +1,90 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css"
+    />
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"
+    ></script>
+    <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
+    <script
+      type="text/javascript"
+      src="node_modules/xterm/lib/xterm.js"
+    ></script>
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+    <title>sVelocity</title>
+    <script defer src="./build/webpack-bundle.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
-  </link>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js">
-  </script>
-  <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
-  <script type="text/javascript" src="node_modules/xterm/lib/xterm.js"></script>
-  <link rel="stylesheet" type="text/css" href="./styles.css" />
-  <title>sVelocity</title>
-  <script defer src="./build/webpack-bundle.js"></script>
-</head>
+  <body>
+    <div id="browser-form">
+      <input
+        type="text"
+        id="url-field"
+        class="form-field"
+        placeholder="Browser View URL..."
+      />
+      <input type="button" id="browser-btn" value="Go" />
+    </div>
+    <div class="sidebar">
+      <div class="icons">
+        <a
+          ><i class="fa fa-fw fa-home"></i>
+          <img
+            id="open-file"
+            src="src/assets/folder.png"
+            style="max-height: 50px"
+          />
+        </a>
 
+        <a
+          ><i class="fa fa-fw fa-wrench"></i>
+          <img
+            id="save-file"
+            src="src/assets/savefile.png"
+            style="max-height: 50px"
+          />
+        </a>
+        <a
+          ><i class="fa fa-fw fa-user"></i>
+          <img
+            id="new-file"
+            src="src/assets/newfile.png"
+            style="max-height: 50px"
+          />
+        </a>
+        <a
+          ><i class="fa fa-fw fa-envelope"></i>
+          <img
+            id="toggle-dark-mode"
+            src="src/assets/day.png"
+            style="max-height: 50px"
+          />
+        </a>
+      </div>
+      <a
+        ><i class="fa fa-fw fa-envelope"></i>
+        <img
+          id="devtools-btn"
+          src="src/assets/repair.png"
+          style="max-height: 50px"
+        />
+      </a>
+    </div>
 
-<body>
-  <div class="sidebar">
-    <div class="icons">
-    <a><i class="fa fa-fw fa-home"></i>
-      <img id="open-file" src="src/assets/folder.png" style="max-height: 50px;">
-    </a>
-
-    <a><i class="fa fa-fw fa-wrench"></i>
-      <img id="save-file" src="src/assets/savefile.png" style="max-height: 50px;">
-    </a>
-    <a><i class="fa fa-fw fa-user"></i>
-      <img id="new-file" src="src/assets/newfile.png" style="max-height: 50px;">
-    </a>
-    <a><i class="fa fa-fw fa-envelope"></i>
-      <img id="toggle-dark-mode" src="src/assets/day.png" style="max-height: 50px;">
-    </a>
-  </div>
-  <!-- <input type="button" id="devtools-btn">
-  <img src="src/assets/repair.png"/>
-  </input> -->
-  <a><i class="fa fa-fw fa-envelope"></i>
-    <img id="devtools-btn" src="src/assets/repair.png" style="max-height: 50px;">
-  </a>
-      <!-- <button id="toggle-dark-mode">Toggle Dark Mode</button> -->
-
-        <!-- <img id="open-file" class="fa fa-fw fa-home" src="src/assets/folder.png" style="max-height: 50px;"> -->
-      <!-- <button id="new-file">New File</button> -->
-      <!-- <button id="save-file">Save File</button> -->
-
-
-      <section id="browser-form-section">
-        <!-- <form id="browser-form" class="form-group"> -->
-          <!-- <label>Browser View URL:</label> -->
-          <input type="text" id="url-field" class="form-field" placeholder="Browser View URL..."><br>
-          <input type="button" id="browser-btn" value="Go"></input><br>
-        <!-- </form> -->
-      </section>
-  </div>
-
-  <ul class="tabs"></ul>
-  <textarea id="editor">
-  </textarea>
-  <div class="outer-terminal">
-    <div id='terminal-container'></div>
-  </div>
-  <script src="./renderer.js"></script>
-</body>
-
+    <ul class="tabs"></ul>
+    <textarea id="editor"> </textarea>
+    <div class="outer-terminal">
+      <div id="terminal-container"></div>
+    </div>
+    <script src="./renderer.js"></script>
+  </body>
 </html>
