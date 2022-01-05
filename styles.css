@@ -151,6 +151,29 @@ li {
   margin-right: 8px;
   border-bottom: 0;
   height: fit-content;
+  border-radius: 8px 8px 0 0;
+}
+button.close {
+  background-color: white;
+  border: 1px solid #1b2e5c;
+  margin-right: 5px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #1b2e5c;
+  padding: 2px 5px;
+}
+
+#tabInput :focus {
+  color: #1b2e5c;
+}
+
+#tabInput {
+  font-size: 15px;
+  outline-color: #1b2e5c;
+  height: 32px;
+  border-radius: 8px 8px 0 0;
+  border: 1px solid grey;
+  width: 123px;
 }
 
 .tabs {

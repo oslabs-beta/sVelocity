@@ -41,7 +41,7 @@ window.fileHandler.recieveMessage((content, allFiles) => {
   const btn = document.createElement('button');
 
   txt.innerText = `${selfObj.filename}`;
-  btn.innerText = 'x';
+  btn.innerText = 'X';
   tab.setAttribute('class', true);
   txt.setAttribute('class', 'text');
   btn.setAttribute('class', 'close');
@@ -65,6 +65,7 @@ window.fileHandler.recieveMessage((content, allFiles) => {
   }
 
   txt.addEventListener('click', () => {
+    console.log('text clicked________________________');
     //click file functionality
     //remove clicked tab from recently viewed queue and re-insert it so that the order is correct
     lastViewed.delete(selfObj.filename);
@@ -96,6 +97,7 @@ window.fileHandler.recieveMessage((content, allFiles) => {
 
   //closing tab functionality
   btn.addEventListener('click', () => {
+    console.log('button clicked________________________');
     console.log(allData, 'aaaaaallllData4');
     //if tab to be closed is last tab, reset editor to empty, turn active to false and remove tab
     if (tabs.length <= 1) {
@@ -105,7 +107,7 @@ window.fileHandler.recieveMessage((content, allFiles) => {
       console.log(allData, 'aaaaaallllData5');
 
       //remove obj from allData array
-      allData.splice(allData.indexOf(selfObj), 1);
+      //allData.splice(allData.indexOf(selfObj), 1);
       //if tab not last, set active property to false, remove from recently viewed queue, set as active tab the most recently viewed tab and set editor to corresponding editor content.
     } else {
       const updatedData = allData;
@@ -115,11 +117,14 @@ window.fileHandler.recieveMessage((content, allFiles) => {
       console.log(selfObj, 'self obj');
       //console.log(allData, 'allData');
       //if current obj property is active then deactivate it and delete filename from recently viewed queue
-      if (selfObj.active) {
+      const parentActiveTab = btn.closest('.true');
+
+      if (Boolean(parentActiveTab)) {
         selfObj.active = false;
         lastViewed.delete(selfObj.filename);
         //console.log('close tab button clicked - lastviewed', lastViewed);
         //console.log(alldata, 'alldata');
+        console.log('active');
         console.log(allData, 'allData1');
         console.log(lastViewed, 'lastviewed');
         console.log([...lastViewed][lastViewed.size - 1], 'lastviewed item');
@@ -128,10 +133,9 @@ window.fileHandler.recieveMessage((content, allFiles) => {
         console.log(dataFromStore.length, 'adataFromStore.length');
         //search the obj that is the last viewed item
         //bug: store here doesn't have both items (newFiles)
-        const activeFile = dataFromStore.find((obj) => {
-          console.log(obj.filename, 'objectfrom find');
-          obj.filename === [...lastViewed][lastViewed.size - 1];
-        });
+        const activeFile = allData.find(
+          (obj) => obj.filename == [...lastViewed][lastViewed.size - 1]
+        );
 
         console.log(activeFile, 'activefile');
         const tabs = document.getElementsByTagName('LI');
@@ -157,14 +161,14 @@ window.fileHandler.recieveMessage((content, allFiles) => {
       //delete tab
       tab.remove();
     }
+    //remove obj from allData array
+    allData.splice(allData.indexOf(selfObj), 1);
   });
 
   //append tab to ul dom parent
   ul[0].appendChild(tab);
   //set the editor value to the curret obj editor value
   editor.setValue(content);
-  //remove obj from allData array
-  allData.splice(allData.indexOf(selfObj), 1);
 });
 
 seeBrowser.addEventListener('click', () => {
@@ -222,7 +226,7 @@ window.fileHandler.receiveNewFileData((allFiles) => {
   const btn = document.createElement('button');
 
   txt.innerText = `${selfObject.filename}`;
-  btn.innerText = 'x';
+  btn.innerText = 'X';
   tab.setAttribute('class', true);
   txt.setAttribute('class', 'text');
   btn.setAttribute('class', 'close');
@@ -258,6 +262,7 @@ window.fileHandler.receiveNewFileData((allFiles) => {
     console.log('clicked tab text - lastviewed', lastViewed);
     //editor.setValue(selfObj.editor.value);
     //show obj editor value
+    console.log('editor.setValue - show editor when clicked');
     editor.setValue(selfObject.editor.value);
 
     //go through the data array, turn active: false  properties on all the other objs and active on the current obj
@@ -285,6 +290,7 @@ window.fileHandler.receiveNewFileData((allFiles) => {
 
     //if tab to be closed is last tab, reset editor to empty, turn active to false and remove tab
     if (tabs.length <= 1) {
+      console.log('editor.setValue - last tab close');
       editor.setValue('');
       tab.remove();
       //if tab not last, set active to false, remove from recently viewed queue, set as active tab the most recently viewed tab and set editor to corresponding editor content.
@@ -295,6 +301,9 @@ window.fileHandler.receiveNewFileData((allFiles) => {
         selfObject.active = false;
         lastViewed.delete(parentActiveTab.innerText.slice(0, -1));
         console.log('close tab button clicked - lastviewed', lastViewed);
+        const activeFile = allDataNewFile.find(
+          (obj) => obj.filename == [...lastViewed][lastViewed.size - 1]
+        );
 
         const tabs = document.getElementsByTagName('LI');
         console.log(tabs);
@@ -308,6 +317,8 @@ window.fileHandler.receiveNewFileData((allFiles) => {
             break;
           }
         }
+        editor.setValue(activeFile.editor.value);
+        activeFile.active = true;
         //else (non-active tab)
       } else {
         const parentTab = btn.parentNode;
@@ -318,6 +329,8 @@ window.fileHandler.receiveNewFileData((allFiles) => {
     }
   });
   ul[0].appendChild(tab);
+  console.log('editor.setValue - set new file contents');
+  editor.setValue(selfObject.editor.value);
 });
 //});
 
