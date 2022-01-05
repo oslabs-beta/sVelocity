@@ -6,18 +6,6 @@ sVelocity is a cross-platform code editor application optimized for building and
 
 #### sVelocity is in active development. Please follow this repo for contribution guidelines and road map.
 
-<!-- ## Topic #1
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-## Topic #2
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-## Topic #3
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. -->
-
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
@@ -26,6 +14,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 - [Built With](#built-with)
 - [Features](#features)
 - [Upcoming Features](#upcoming-features)
+- [Contibutions Welcome](#contibutions-welcome)
 - [License](#license)
 - [Contributors](#contributors)
 
@@ -89,7 +78,7 @@ Toggle dark-mode
 
 - Javascript ES6
 - Node.js
-- XTerm
+- XTerm.js
 - Electron
 - Codemirror Code Editor
 - Electron-Store
@@ -111,6 +100,10 @@ Toggle dark-mode
 - A component tree to visualize state and the flow of the user's application
 - Linter and spell-check features
 - Allow components to be draggable with mouse.
+
+## Contibutions Welcome
+
+We are always happy to receive feedback and ideas on how to improve. Please feel free to make a PR with your suggestions and one of the developer team members will get in touch as soon as possible.
 
 ## License
 
