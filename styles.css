@@ -145,8 +145,8 @@ body {
     "sidenav tabs search search"
     "sidenav codemirror codemirror ."
     "sidenav terminal terminal .";
-  grid-template-rows: 0.1fr 2.5fr auto auto;
-  grid-template-columns: 0.1fr 1fr auto auto;
+  grid-template-rows: 0.15fr 2.5fr auto auto;
+  grid-template-columns: 0.15fr 1fr auto auto;
 }
 
 li {
@@ -171,6 +171,7 @@ h5.text {
 .CodeMirror {
   grid-area: codemirror;
   height: auto;
+  width: 63%;
 }
 .xterm-viewport {
   width: 100% !important;
@@ -178,6 +179,9 @@ h5.text {
 
 .outer-terminal {
   grid-area: terminal;
+  /* margin-left: .8rem; */
+  max-width: 67%;
+
 }
 
 div.xterm-rows > div[style] {
@@ -188,6 +192,7 @@ div.xterm-rows > div[style] {
 
 .xterm-screen {
   height: 200px !important;
+  /* bottom: 0; */
 }
 
 #terminal-container {
@@ -217,10 +222,12 @@ div.xterm-rows > div[style] {
   top: 0;
   left: 0;
   overflow-x: hidden;
-  padding-top: 16px;
   grid-area: sidenav;
 }
 
+#open-file {
+  margin-top: .8rem;
+}
 /* Style sidebar links */
 .sidebar a {
   padding: 6px 8px 6px 16px;
