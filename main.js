@@ -71,12 +71,7 @@ const createWindow = () => {
     console.log(`failed to load ${url}`);
     view.webContents.loadURL('https://http.cat/404');
   });
-  // view.setAutoResize({
-  //   horizontal: true,
-  //   vertical: true,
-  //   width: true,
-  //   height: true,
-  // });
+
   view.setAutoResize({ horizontal: true, vertical: true, height: true });
 
   function devT() {
@@ -131,14 +126,6 @@ ipcMain.handle('getFileFromUser', async (event) => {
 
     const content = await fs.readFile(file, 'utf-8');
     allFiles = store.get('allFiles');
-
-    // if (
-    //   allFiles.find((obj) => {
-    //     return obj.filepath === file;
-    //   })
-    // ) {
-    //   return;
-    // }
 
     allFiles.push({
       filepath: file,

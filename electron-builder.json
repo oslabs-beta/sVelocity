@@ -9,7 +9,7 @@
   },
 
   "files": [
-    "./build/**/*",
+    "./dist/**/*",
     "node_modules/",
     "package.json",
     "preload.js",
@@ -24,19 +24,20 @@
   "mac": {
     "target": ["dmg", "zip"],
     "artifactName": "${productName}-${version}-${os}.${ext}",
-    "category": "sVelocity.app-category.developer-tools"
+    "category": "sVelocity.app-category.developer-tools",
+    "icon": "./build/icon.icns"
   },
 
   "dmg": {
     "title": "${productName}-${version}",
     "contents": [
       {
-        "x": 300,
-        "y": 360
+        "x": 130,
+        "y": 220
       },
       {
-        "x": 490,
-        "y": 360,
+        "x": 410,
+        "y": 220,
         "type": "link",
         "path": "/Applications"
       }
