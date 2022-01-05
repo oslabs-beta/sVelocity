@@ -180,6 +180,7 @@ h5.text {
 .outer-terminal {
   grid-area: terminal;
   margin-left: .8rem;
+  max-width: 62%;
 }
 
 div.xterm-rows > div[style]{
@@ -195,10 +196,6 @@ div.xterm-rows > div[style]{
 
 #terminal-container {
   max-width: 100%;
-}
-
-.outer-terminal {
-  max-width: 62%;
 }
 
 .xterm-text-layer {
