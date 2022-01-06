@@ -25,7 +25,7 @@ The sVelocity IDE can be set up in two ways, the first is to bundle the electron
 Installation step 1:
 
 ```
-Visit the SVelocity Official [website](http://svelocity.io/) to download the app.
+Visit the SVelocity Official website to download the app.
 ```
 
 <p align="center">
