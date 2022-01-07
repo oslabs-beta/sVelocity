@@ -1,4 +1,4 @@
-<p align="center"><a href='http://svelocity.io/'><img alt="sVelocity logo" src="./assets/logo_lightblue_on_darkblue.png" width="500px"></a></p>
+<p align="center"><a href='http://svelocity.io/'><img alt="sVelocity logo" src="./githubAssets/logo_lightblue_on_darkblue.png" width="500px"></a></p>
 
 ### sVelocity is a dedicated IDE for Svelte web application development.
 
